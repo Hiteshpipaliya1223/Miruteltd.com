@@ -3,16 +3,16 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext'; // Import the useCart hook
 
 const Header = () => {
-  // Use the useCart hook to get the getTotalItems function
   const { getTotalItems } = useCart();
-  const cartItemCount = getTotalItems(); // Get the current count of items in the cart
+  const cartItemCount = getTotalItems();
 
   return (
     <header style={headerStyles.container}>
       <div style={headerStyles.topBar}>
         <div style={headerStyles.topBarLeft}>
-          <a href="#" style={headerStyles.topBarLink}>GB <span style={{fontSize: '0.8em'}}>▼</span></a>
-          <a href="#" style={headerStyles.topBarLink}>COMPARE ()</a>
+          {/* Replaced href="#" with button for accessibility */}
+          <button style={headerStyles.topBarLink}>GB <span style={{ fontSize: '0.8em' }}>▼</span></button>
+          <button style={headerStyles.topBarLink}>COMPARE (0)</button>
         </div>
         <div style={headerStyles.topBarRight}>
           <span style={headerStyles.welcomeText}>WELCOME TO MIRUTE LTD.</span>
@@ -41,13 +41,13 @@ const Header = () => {
         </div>
         <div style={headerStyles.cartIcon}>
           <Link to="/cart" style={{ ...headerStyles.cartText, textDecoration: 'none', color: 'inherit' }}>🛒</Link>
-          {/* Display the dynamic cart count */}
           <span style={headerStyles.cartCount}>{cartItemCount}</span>
         </div>
       </div>
     </header>
   );
 };
+
 const headerStyles = {
   container: {
     backgroundColor: 'var(--white)',
@@ -78,6 +78,12 @@ const headerStyles = {
     flexGrow: 1,
   },
   topBarLink: {
+    background: 'none',
+    border: 'none',
+    padding: 0,
+    margin: 0,
+    cursor: 'pointer',
+    font: 'inherit',
     textDecoration: 'none',
     color: 'var(--secondary-dark)',
     fontWeight: 'normal',
@@ -120,10 +126,6 @@ const headerStyles = {
     borderRadius: '5px 0 0 5px',
     fontSize: '1em',
     outline: 'none',
-    transition: 'border-color 0.3s ease',
-    '&:focus': {
-      borderColor: 'var(--primary-blue)',
-    }
   },
   searchButton: {
     backgroundColor: 'var(--primary-blue)',
@@ -133,10 +135,6 @@ const headerStyles = {
     borderRadius: '0 5px 5px 0',
     cursor: 'pointer',
     fontSize: '1.1em',
-    transition: 'background-color 0.3s ease',
-    '&:hover': {
-      backgroundColor: '#0056b3',
-    }
   },
   contactInfo: {
     textAlign: 'right',
@@ -182,53 +180,6 @@ const headerStyles = {
     textAlign: 'center',
     boxSizing: 'border-box',
   },
-  // Media queries for larger screens
-  '@media (min-width: 768px)': {
-    mainHeader: {
-      flexWrap: 'nowrap',
-      justifyContent: 'space-between',
-    },
-    searchBar: {
-      order: 'unset',
-      width: 'auto',
-      margin: '0 20px',
-    },
-    contactInfo: {
-      order: 'unset',
-    },
-    cartIcon: {
-      order: 'unset',
-      marginLeft: 'unset',
-    },
-  },
-  '@media (max-width: 500px)': {
-    topBar: {
-      flexDirection: 'column',
-      alignItems: 'flex-start',
-    },
-    mainHeader: {
-      flexDirection: 'column',
-      alignItems: 'center',
-      padding: '15px 10px',
-    },
-    logo: {
-      marginBottom: '15px',
-    },
-    searchBar: {
-      order: 3,
-      marginBottom: '15px',
-    },
-    contactInfo: {
-      order: 2,
-      textAlign: 'center',
-      marginBottom: '15px',
-    },
-    cartIcon: {
-      order: 4,
-      marginLeft: '0',
-      width: '100%',
-      justifyContent: 'center',
-    },
-  }
 };
+
 export default Header;
