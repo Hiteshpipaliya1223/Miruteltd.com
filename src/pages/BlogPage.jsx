@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // <--- ADD THIS LINE
 
 const BlogPage = () => {
   const blogPosts = [
@@ -39,7 +40,8 @@ const BlogPage = () => {
               <h3 style={pageStyles.postTitle}>{post.title}</h3>
               <p style={pageStyles.postDate}>{post.date}</p>
               <p style={pageStyles.postExcerpt}>{post.excerpt}</p>
-              <a href="#" style={pageStyles.readMoreLink}>Read More &rarr;</a>
+              {/* ✅ FIXED LINK FOR NETLIFY */}
+              <Link to={`/blog/${post.id}`} style={pageStyles.readMoreLink}>Read More &rarr;</Link>
             </div>
           </div>
         ))}
@@ -89,10 +91,7 @@ const pageStyles = {
     transition: 'transform 0.3s ease, box-shadow 0.3s ease',
     display: 'flex', // Use flexbox
     flexDirection: 'column', // Stack content
-    '&:hover': {
-      transform: 'translateY(-8px)', // More pronounced lift
-      boxShadow: '0 8px 20px rgba(0,0,0,0.1)', // Stronger shadow
-    }
+    // Note: '&:hover' syntax doesn't work with inline styles, usually for CSS-in-JS libraries
   },
   postImage: {
     width: '100%',
@@ -131,9 +130,7 @@ const pageStyles = {
     transition: 'color 0.3s ease',
     alignSelf: 'flex-start', // Align to start of flex container
     marginTop: 'auto', // Push to bottom
-    '&:hover': {
-      color: 'var(--accent-pink)', // Accent color on hover
-    },
+    // Note: '&:hover' syntax doesn't work with inline styles
   },
   '@media (max-width: 768px)': {
     container: {
