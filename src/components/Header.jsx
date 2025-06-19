@@ -1,8 +1,9 @@
+// src/components/Header.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext'; // Import the useCart hook
 import MiruteLogo from '../assets/your-logo.svg'; // <--- NEW: Import your SVG logo file here.
-                                                //      Adjust the path if your SVG is in a different folder.
+                                                 //      Adjust the path if your SVG is in a different folder.
 
 const Header = () => {
   const { getTotalItems } = useCart();
@@ -20,7 +21,8 @@ const Header = () => {
           <a href="mailto:Mirute1307@gmail.com" style={headerStyles.topBarLink}>CONTACT US</a>
           <Link to="/faq" style={headerStyles.topBarLink}>FAQ</Link>
           <Link to="/blog" style={headerStyles.topBarLink}>BLOG</Link>
-          <Link to="/alterations" style={headerStyles.topBarLink}>STITCHING & ALTERATIONS</Link> {/* <--- NEW: Your new link */}
+          {/* <--- FIX: Changed the 'to' prop to match the correct route */}
+          <Link to="/stitching-alterations" style={headerStyles.topBarLink}>STITCHING & ALTERATIONS</Link>
           <Link to="/register" style={headerStyles.topBarLink}>REGISTER</Link>
           <Link to="/sign-in" style={headerStyles.topBarLink}>SIGN IN</Link>
           <Link to="/register" style={headerStyles.topBarLink}>CREATE AN ACCOUNT</Link>
