@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext'; // Import the useCart hook
+import MiruteLogo from '../assets/your-logo.svg'; // <--- NEW: Import your SVG logo file here.
+                                                //      Adjust the path if your SVG is in a different folder.
 
 const Header = () => {
   const { getTotalItems } = useCart();
@@ -10,7 +12,6 @@ const Header = () => {
     <header style={headerStyles.container}>
       <div style={headerStyles.topBar}>
         <div style={headerStyles.topBarLeft}>
-          {/* Replaced href="#" with button for accessibility */}
           <button style={headerStyles.topBarLink}>GB <span style={{ fontSize: '0.8em' }}>▼</span></button>
           <button style={headerStyles.topBarLink}>COMPARE (0)</button>
         </div>
@@ -19,6 +20,7 @@ const Header = () => {
           <a href="mailto:Mirute1307@gmail.com" style={headerStyles.topBarLink}>CONTACT US</a>
           <Link to="/faq" style={headerStyles.topBarLink}>FAQ</Link>
           <Link to="/blog" style={headerStyles.topBarLink}>BLOG</Link>
+          <Link to="/alterations" style={headerStyles.topBarLink}>STITCHING & ALTERATIONS</Link> {/* <--- NEW: Your new link */}
           <Link to="/register" style={headerStyles.topBarLink}>REGISTER</Link>
           <Link to="/sign-in" style={headerStyles.topBarLink}>SIGN IN</Link>
           <Link to="/register" style={headerStyles.topBarLink}>CREATE AN ACCOUNT</Link>
@@ -28,7 +30,8 @@ const Header = () => {
       <div style={headerStyles.mainHeader}>
         <div style={headerStyles.logo}>
           <Link to="/">
-            <img src="https://i.imgur.com/qQXdrfu.jpeg" alt="Mirute Ltd. Logo" style={headerStyles.logoImage} />
+            {/* <--- UPDATED: Using the imported SVG logo */}
+            <img src={MiruteLogo} alt="Mirute Ltd. Logo" style={headerStyles.logoImage} />
           </Link>
         </div>
         <div style={headerStyles.searchBar}>
@@ -109,15 +112,15 @@ const headerStyles = {
     flexShrink: 0,
   },
   logoImage: {
-    height: '50px',
+    height: '50px', // Adjust as needed
     width: 'auto',
   },
   searchBar: {
     display: 'flex',
     flexGrow: 1,
     maxWidth: '550px',
-    order: 3,
-    width: '100%',
+    order: 3, // Maintain order for responsiveness
+    width: '100%', // Ensure it takes full width on small screens
   },
   searchInput: {
     flexGrow: 1,
@@ -138,7 +141,7 @@ const headerStyles = {
   },
   contactInfo: {
     textAlign: 'right',
-    order: 2,
+    order: 2, // Maintain order for responsiveness
     whiteSpace: 'nowrap',
   },
   callNow: {
@@ -158,8 +161,8 @@ const headerStyles = {
     fontSize: '1.8em',
     color: 'var(--secondary-dark)',
     position: 'relative',
-    order: 4,
-    marginLeft: 'auto',
+    order: 4, // Maintain order for responsiveness
+    marginLeft: 'auto', // Pushes it to the right
     cursor: 'pointer',
   },
   cartText: {
