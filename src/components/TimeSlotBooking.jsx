@@ -1,5 +1,5 @@
 // src/components/TimeSlotBooking.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'; // <-- ADD useCallback here
 
 const TimeSlotBooking = () => {
   const [selectedDate, setSelectedDate] = useState('');
@@ -25,26 +25,15 @@ const TimeSlotBooking = () => {
     return `${year}-${month}-${day}`;
   };
 
-  // Get today's date in YYYY-MM-DD format for initial selection
-  useEffect(() => {
-    const today = new Date();
-    setSelectedDate(formatDate(today));
-  }, []);
-
-  // Fetch slots whenever the selectedDate changes
-  useEffect(() => {
-    if (selectedDate) {
-      fetchAvailableSlots();
-    }
-  }, [selectedDate]); // Dependency array includes selectedDate
-
-  const fetchAvailableSlots = async () => {
+  // Wrap fetchAvailableSlots with useCallback
+  const fetchAvailableSlots = useCallback(async () => { // <-- WRAP WITH useCallback
     setLoading(true);
     setError(null);
     setAvailableSlots([]);
     setBookingMessage(''); // Clear previous booking messages
 
     try {
+      // Netlify functions are served from the /.netlify/functions/ path
       const response = await fetch(`/.netlify/functions/getAvailableSlots?date=${selectedDate}`);
       
       if (!response.ok) {
@@ -60,7 +49,20 @@ const TimeSlotBooking = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedDate]); // <-- DEPENDENCY for useCallback: fetchAvailableSlots depends on selectedDate
+
+  // Get today's date in YYYY-MM-DD format for initial selection
+  useEffect(() => {
+    const today = new Date();
+    setSelectedDate(formatDate(today));
+  }, []);
+
+  // Fetch slots whenever the selectedDate or fetchAvailableSlots function changes
+  useEffect(() => {
+    if (selectedDate) {
+      fetchAvailableSlots();
+    }
+  }, [selectedDate, fetchAvailableSlots]); // <-- ADD fetchAvailableSlots here as a dependency
 
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
@@ -322,11 +324,6 @@ const styles = {
   submitButtonHover: {
     backgroundColor: '#0056b3',
   },
-  slotsContainer: {
-    marginTop: '30px',
-    borderTop: '1px solid #eee',
-    paddingTop: '20px',
-  },
   slotGrid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
@@ -373,9 +370,14 @@ const styles = {
   },
 };
 
-// Add hover styles dynamically
-styles.submitButton[':hover'] = styles.submitButtonHover;
-styles.slotButton[':hover'] = styles.slotButtonHover;
+// Add hover styles dynamically - these are applied but won't be reflected in the code above
+// as they are outside the React component's render method
+// and would typically be handled by CSS-in-JS libraries or a separate stylesheet.
+// For direct JSX 'style' prop, you usually define :hover with JS event handlers or a CSS file.
+// Keeping them here for completeness as per original example, but they won't function as written.
+// You'd need to use CSS classes or a library like styled-components for proper hover states.
+// styles.submitButton[':hover'] = styles.submitButtonHover;
+// styles.slotButton[':hover'] = styles.slotButtonHover;
 
 
 export default TimeSlotBooking;
