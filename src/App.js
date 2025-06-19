@@ -16,7 +16,8 @@ import FAQPage from "./pages/FAQPage";
 import BlogPage from "./pages/BlogPage";
 import AuthPages from "./pages/AuthPages"; 
 import CartPage from "./pages/CartPage"; 
-import ProductDetailPage from "./pages/ProductDetailPage"; // Ensure this is imported
+import ProductDetailPage from "./pages/ProductDetailPage"; 
+import StitchingAlterationsPage from "./pages/StitchingAlterationsPage"; // <-- NEW IMPORT
 
 // import NotFoundPage from "./pages/NotFoundPage"; // You can uncomment this if you create a NotFoundPage.jsx
 
@@ -57,6 +58,9 @@ function App() {
               
               {/* Route for the Cart Page */}
               <Route path="/cart" element={<CartPage />} /> 
+
+              {/* NEW ROUTE FOR STITCHING & ALTERATIONS */}
+              <Route path="/stitching-alterations" element={<StitchingAlterationsPage />} />
               
               {/* Catch-all for undefined routes */}
               <Route path="*" element={<h1>404: Page Not Found</h1>} />

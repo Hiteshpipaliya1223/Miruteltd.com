@@ -1,7 +1,12 @@
 [build]
   functions = "netlify/functions"
   publish = "build"
+  command = "npm run build" # Explicitly define the build command
 
 [functions]
   node_bundler = "esbuild"
   external_node_modules = ["mongodb", "dotenv"]
+  # If your functions are large, you might need to increase memory:
+  # memory = 256 # Default is 1024, but 256 might be sufficient and prevent cold starts.
+  # If you face issues with function execution, you can try increasing timeout or memory
+  # timeout = 10 # seconds, default is 10, max is 60 (or 26 for some plans)
