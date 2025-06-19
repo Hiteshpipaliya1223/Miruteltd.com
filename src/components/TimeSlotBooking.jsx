@@ -4,89 +4,82 @@ import React, { useState, useEffect } from 'react';
 const TimeSlotBooking = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [availableSlots, setAvailableSlots] = useState([]);
-  const [selectedSlotId, setSelectedSlotId] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [bookingMessage, setBookingMessage] = useState('');
+
+  // Form state for booking
   const [customerName, setCustomerName] = useState('');
   const [customerEmail, setCustomerEmail] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
-  const [serviceType, setServiceType] = useState('stitching'); // Default service type
+  const [serviceType, setServiceType] = useState('Stitching Consultation');
   const [notes, setNotes] = useState('');
-  const [bookingOption, setBookingOption] = useState('drop-off'); // 'drop-off' or 'pickup'
-  const [pickupAddress, setPickupAddress] = useState('');
-  const [numItems, setNumItems] = useState(''); // Number of items for pickup
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [selectedSlotId, setSelectedSlotId] = useState(null);
 
-  // Function to get today's date in YYYY-MM-DD format
-  const getTodayDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
+  // Function to format date to YYYY-MM-DD
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   };
 
+  // Get today's date in YYYY-MM-DD format for initial selection
   useEffect(() => {
-    // Set initial date to today
-    setSelectedDate(getTodayDate());
+    const today = new Date();
+    setSelectedDate(formatDate(today));
   }, []);
 
+  // Fetch slots whenever the selectedDate changes
   useEffect(() => {
-    const fetchSlots = async () => {
-      if (!selectedDate) {
-        setAvailableSlots([]);
-        return;
+    if (selectedDate) {
+      fetchAvailableSlots();
+    }
+  }, [selectedDate]); // Dependency array includes selectedDate
+
+  const fetchAvailableSlots = async () => {
+    setLoading(true);
+    setError(null);
+    setAvailableSlots([]);
+    setBookingMessage(''); // Clear previous booking messages
+
+    try {
+      const response = await fetch(`/.netlify/functions/getAvailableSlots?date=${selectedDate}`);
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to fetch slots.');
       }
 
-      setLoading(true);
-      setError('');
-      setMessage('');
-      try {
-        const response = await fetch(`/.netlify/functions/getAvailableSlots?date=${selectedDate}`);
-        const data = await response.json();
-
-        if (response.ok) {
-          setAvailableSlots(data);
-        } else {
-          setError(data.error || 'Failed to fetch available slots.');
-          setAvailableSlots([]);
-        }
-      } catch (err) {
-        console.error('Error fetching slots:', err);
-        setError('Network error or server unreachable. Failed to fetch slots.');
-        setAvailableSlots([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSlots();
-  }, [selectedDate]); // Refetch slots when selectedDate changes
+      const data = await response.json();
+      setAvailableSlots(data);
+    } catch (err) {
+      console.error("Error fetching slots:", err);
+      setError(err.message || 'Could not load slots.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-    setMessage('');
+    setBookingMessage('');
+    setError(null);
 
     if (!selectedSlotId) {
       setError('Please select a time slot.');
-      setLoading(false);
       return;
     }
-    if (!customerName || !customerEmail || !customerPhone) {
-      setError('Please fill in all required customer details.');
-      setLoading(false);
+    if (!customerName || !customerEmail || !serviceType) {
+      setError('Name, Email, and Service Type are required.');
       return;
-    }
-    if (bookingOption === 'pickup' && (!pickupAddress || !numItems)) {
-        setError('Please provide pickup address and number of items.');
-        setLoading(false);
-        return;
     }
 
+    setLoading(true);
+
     try {
-      const response = await fetch('/.netlify/functions/bookSlot', {
+      const response = await fetch(`/.netlify/functions/bookSlot`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -98,195 +91,152 @@ const TimeSlotBooking = () => {
           customerPhone,
           serviceType,
           notes,
-          bookingOption, // 'drop-off' or 'pickup'
-          pickupDetails: bookingOption === 'pickup' ? { address: pickupAddress, numItems: numItems } : undefined,
         }),
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        setMessage('Booking successful! We will contact you shortly to confirm details.');
-        // Optionally clear form or refetch slots
-        setAvailableSlots(prevSlots => prevSlots.filter(slot => slot._id !== selectedSlotId));
-        setSelectedSlotId('');
-        setCustomerName('');
-        setCustomerEmail('');
-        setCustomerPhone('');
-        setNotes('');
-        setPickupAddress('');
-        setNumItems('');
-      } else {
-        setError(data.error || 'Failed to book slot.');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Booking failed. Please try again.');
       }
+
+      const data = await response.json();
+      setBookingMessage(data.message || 'Slot booked successfully!');
+      // Refresh available slots after successful booking
+      fetchAvailableSlots(); 
+      // Clear form fields
+      setCustomerName('');
+      setCustomerEmail('');
+      setCustomerPhone('');
+      setServiceType('Stitching Consultation');
+      setNotes('');
+      setSelectedSlotId(null);
+
     } catch (err) {
-      console.error('Error booking slot:', err);
-      setError('Network error or server unreachable. Failed to book slot.');
+      console.error("Error booking slot:", err);
+      setError(err.message || 'An unexpected error occurred during booking.');
     } finally {
       setLoading(false);
     }
   };
 
-  const today = getTodayDate();
+  const handleSlotSelection = (slotId) => {
+    setSelectedSlotId(slotId);
+    setBookingMessage(''); // Clear message when new slot is selected
+  };
 
   return (
-    <div style={bookingStyles.container}>
-      <h2 style={bookingStyles.heading}>Book Your Service Slot</h2>
+    <div style={styles.container}>
+      <h2 style={styles.heading}>Book Your Service Slot</h2>
 
-      {message && <p style={bookingStyles.successMessage}>{message}</p>}
-      {error && <p style={bookingStyles.errorMessage}>{error}</p>}
-
-      <div style={bookingStyles.section}>
-        <label htmlFor="bookingDate" style={bookingStyles.label}>Select Date:</label>
+      {/* Date Picker */}
+      <div style={styles.formGroup}>
+        <label htmlFor="bookingDate" style={styles.label}>Select Date:</label>
         <input
           type="date"
           id="bookingDate"
           value={selectedDate}
           onChange={(e) => setSelectedDate(e.target.value)}
-          min={today} // Prevent selecting past dates
-          style={bookingStyles.input}
+          style={styles.input}
         />
       </div>
 
-      <div style={bookingStyles.section}>
-        <h3 style={bookingStyles.subHeading}>Available Time Slots for {selectedDate}:</h3>
-        {loading ? (
-          <p>Loading slots...</p>
-        ) : availableSlots.length === 0 ? (
-          <p>No available slots for this date. Please choose another date.</p>
-        ) : (
-          <div style={bookingStyles.slotGrid}>
+      {loading && <p style={styles.message}>Loading available slots...</p>}
+      {error && <p style={styles.errorMessage}>Error: {error}</p>}
+      {bookingMessage && <p style={styles.successMessage}>{bookingMessage}</p>}
+
+      {/* Available Slots Display */}
+      {!loading && !error && availableSlots.length > 0 && (
+        <div style={styles.slotsContainer}>
+          <h3 style={styles.subHeading}>Available Time Slots for {selectedDate}:</h3>
+          <div style={styles.slotGrid}>
             {availableSlots.map((slot) => (
               <button
                 key={slot._id}
+                onClick={() => handleSlotSelection(slot._id)}
                 style={{
-                  ...bookingStyles.slotButton,
-                  ...(selectedSlotId === slot._id ? bookingStyles.slotButtonSelected : {}),
-                  ...(slot.isBooked ? bookingStyles.slotButtonBooked : {})
+                  ...styles.slotButton,
+                  ...(selectedSlotId === slot._id ? styles.slotButtonSelected : {}),
                 }}
-                onClick={() => !slot.isBooked && setSelectedSlotId(slot._id)}
-                disabled={slot.isBooked}
               >
                 {slot.time}
               </button>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
+      {!loading && !error && availableSlots.length === 0 && selectedDate && (
+        <p style={styles.message}>No available slots for {selectedDate}. Please choose another date.</p>
+      )}
+
+      {/* Booking Form */}
       {selectedSlotId && (
-        <form onSubmit={handleBookingSubmit} style={bookingStyles.form}>
-          <h3 style={bookingStyles.subHeading}>Your Details for Selected Slot: {
-            availableSlots.find(s => s._id === selectedSlotId)?.time
-          } on {selectedDate}</h3>
-
-          <label htmlFor="customerName" style={bookingStyles.label}>Your Name:</label>
-          <input
-            type="text"
-            id="customerName"
-            value={customerName}
-            onChange={(e) => setCustomerName(e.target.value)}
-            required
-            style={bookingStyles.input}
-          />
-
-          <label htmlFor="customerEmail" style={bookingStyles.label}>Your Email:</label>
-          <input
-            type="email"
-            id="customerEmail"
-            value={customerEmail}
-            onChange={(e) => setCustomerEmail(e.target.value)}
-            required
-            style={bookingStyles.input}
-          />
-
-          <label htmlFor="customerPhone" style={bookingStyles.label}>Your Phone:</label>
-          <input
-            type="tel"
-            id="customerPhone"
-            value={customerPhone}
-            onChange={(e) => setCustomerPhone(e.target.value)}
-            required
-            style={bookingStyles.input}
-          />
-
-          <label htmlFor="serviceType" style={bookingStyles.label}>Service Type:</label>
-          <select
-            id="serviceType"
-            value={serviceType}
-            onChange={(e) => setServiceType(e.target.value)}
-            style={bookingStyles.input}
-          >
-            <option value="stitching">Custom Stitching</option>
-            <option value="alterations">General Alterations</option>
-            <option value="repair">Repair</option>
-            <option value="consultation">Consultation</option>
-            {/* Add more service types as needed */}
-          </select>
-
-          <label htmlFor="notes" style={bookingStyles.label}>Additional Notes (Optional):</label>
-          <textarea
-            id="notes"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            rows="4"
-            style={bookingStyles.textarea}
-          ></textarea>
-
-          <div style={bookingStyles.section}>
-            <h3 style={bookingStyles.subHeading}>Service Option:</h3>
-            <div style={bookingStyles.radioGroup}>
-              <label style={bookingStyles.radioLabel}>
-                <input
-                  type="radio"
-                  value="drop-off"
-                  checked={bookingOption === 'drop-off'}
-                  onChange={(e) => setBookingOption(e.target.value)}
-                  style={bookingStyles.radioInput}
-                />
-                Drop off at our address
-              </label>
-              <label style={bookingStyles.radioLabel}>
-                <input
-                  type="radio"
-                  value="pickup"
-                  checked={bookingOption === 'pickup'}
-                  onChange={(e) => setBookingOption(e.target.value)}
-                  style={bookingStyles.radioInput}
-                />
-                Pickup service (within 5 miles for many clothes)
-              </label>
-            </div>
-
-            {bookingOption === 'pickup' && (
-              <div style={bookingStyles.pickupDetails}>
-                <label htmlFor="pickupAddress" style={bookingStyles.label}>Pickup Address:</label>
-                <textarea
-                  id="pickupAddress"
-                  value={pickupAddress}
-                  onChange={(e) => setPickupAddress(e.target.value)}
-                  required
-                  rows="3"
-                  style={bookingStyles.textarea}
-                ></textarea>
-                <label htmlFor="numItems" style={bookingStyles.label}>Number of Items (approx.):</label>
-                <input
-                  type="number"
-                  id="numItems"
-                  value={numItems}
-                  onChange={(e) => setNumItems(e.target.value)}
-                  required
-                  min="1"
-                  style={bookingStyles.input}
-                />
-                <p style={bookingStyles.infoText}>
-                  *Please note: Pickup service is subject to confirmation based on your location and number of items. We will contact you.
-                </p>
-              </div>
-            )}
+        <form onSubmit={handleBookingSubmit} style={styles.bookingForm}>
+          <h3 style={styles.subHeading}>Book Selected Slot ({availableSlots.find(s => s._id === selectedSlotId)?.time} on {selectedDate})</h3>
+          
+          <div style={styles.formGroup}>
+            <label htmlFor="customerName" style={styles.label}>Your Name: <span style={styles.required}>*</span></label>
+            <input
+              type="text"
+              id="customerName"
+              value={customerName}
+              onChange={(e) => setCustomerName(e.target.value)}
+              required
+              style={styles.input}
+            />
           </div>
 
-          <button type="submit" disabled={loading} style={bookingStyles.submitButton}>
+          <div style={styles.formGroup}>
+            <label htmlFor="customerEmail" style={styles.label}>Your Email: <span style={styles.required}>*</span></label>
+            <input
+              type="email"
+              id="customerEmail"
+              value={customerEmail}
+              onChange={(e) => setCustomerEmail(e.target.value)}
+              required
+              style={styles.input}
+            />
+          </div>
+
+          <div style={styles.formGroup}>
+            <label htmlFor="customerPhone" style={styles.label}>Your Phone:</label>
+            <input
+              type="tel"
+              id="customerPhone"
+              value={customerPhone}
+              onChange={(e) => setCustomerPhone(e.target.value)}
+              style={styles.input}
+            />
+          </div>
+
+          <div style={styles.formGroup}>
+            <label htmlFor="serviceType" style={styles.label}>Service Type: <span style={styles.required}>*</span></label>
+            <select
+              id="serviceType"
+              value={serviceType}
+              onChange={(e) => setServiceType(e.target.value)}
+              required
+              style={styles.select}
+            >
+              <option value="Stitching Consultation">Stitching Consultation</option>
+              <option value="Basic Alteration">Basic Alteration</option>
+              <option value="Complex Alteration">Complex Alteration</option>
+              <option value="Custom Design">Custom Design</option>
+            </select>
+          </div>
+
+          <div style={styles.formGroup}>
+            <label htmlFor="notes" style={styles.label}>Notes (optional):</label>
+            <textarea
+              id="notes"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              rows="4"
+              style={styles.textarea}
+            />
+          </div>
+
+          <button type="submit" disabled={loading} style={styles.submitButton}>
             {loading ? 'Booking...' : 'Confirm Booking'}
           </button>
         </form>
@@ -295,173 +245,137 @@ const TimeSlotBooking = () => {
   );
 };
 
-const bookingStyles = {
+const styles = {
   container: {
-    fontFamily: 'Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Open Sans, Helvetica Neue, sans-serif',
+    backgroundColor: '#ffffff',
     padding: '30px',
-    borderRadius: '10px',
-    backgroundColor: 'var(--white)',
-    boxShadow: '0 5px 15px rgba(0,0,0,0.1)',
-    maxWidth: '800px',
+    borderRadius: '8px',
+    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+    maxWidth: '700px',
     margin: '40px auto',
-    color: 'var(--text-color)',
+    fontFamily: 'Arial, sans-serif',
   },
   heading: {
-    fontSize: '2.5em',
-    color: 'var(--primary-dark)',
     textAlign: 'center',
+    color: '#333',
     marginBottom: '30px',
+    fontSize: '2em',
   },
   subHeading: {
-    fontSize: '1.5em',
-    color: 'var(--secondary-dark)',
-    marginTop: '25px',
-    marginBottom: '15px',
+    color: '#555',
+    marginBottom: '20px',
+    fontSize: '1.4em',
+    borderBottom: '1px solid #eee',
+    paddingBottom: '10px',
   },
-  section: {
-    marginBottom: '25px',
-    borderBottom: '1px solid var(--border-color)',
-    paddingBottom: '20px',
+  formGroup: {
+    marginBottom: '20px',
   },
   label: {
     display: 'block',
     marginBottom: '8px',
     fontWeight: 'bold',
-    color: 'var(--secondary-dark)',
-    fontSize: '0.95em',
+    color: '#666',
+  },
+  required: {
+    color: 'red',
+    marginLeft: '5px',
   },
   input: {
-    width: 'calc(100% - 22px)',
-    padding: '12px 10px',
-    marginBottom: '15px',
-    border: '1px solid var(--border-color)',
-    borderRadius: '6px',
+    width: '100%',
+    padding: '12px',
+    border: '1px solid #ddd',
+    borderRadius: '5px',
     fontSize: '1em',
     boxSizing: 'border-box',
-    transition: 'border-color 0.3s ease',
+  },
+  select: {
+    width: '100%',
+    padding: '12px',
+    border: '1px solid #ddd',
+    borderRadius: '5px',
+    fontSize: '1em',
+    backgroundColor: '#fff',
+    boxSizing: 'border-box',
   },
   textarea: {
-    width: 'calc(100% - 22px)',
-    padding: '12px 10px',
-    marginBottom: '15px',
-    border: '1px solid var(--border-color)',
-    borderRadius: '6px',
+    width: '100%',
+    padding: '12px',
+    border: '1px solid #ddd',
+    borderRadius: '5px',
     fontSize: '1em',
+    minHeight: '80px',
     boxSizing: 'border-box',
     resize: 'vertical',
-    minHeight: '80px',
-    transition: 'border-color 0.3s ease',
+  },
+  submitButton: {
+    width: '100%',
+    padding: '15px 20px',
+    backgroundColor: '#007bff',
+    color: 'white',
+    border: 'none',
+    borderRadius: '5px',
+    fontSize: '1.1em',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s ease',
+  },
+  submitButtonHover: {
+    backgroundColor: '#0056b3',
+  },
+  slotsContainer: {
+    marginTop: '30px',
+    borderTop: '1px solid #eee',
+    paddingTop: '20px',
   },
   slotGrid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
     gap: '15px',
-    marginBottom: '20px',
-  },
-  slotButton: {
-    backgroundColor: 'var(--light-bg)',
-    color: 'var(--secondary-dark)',
-    border: '1px solid var(--border-color)',
-    padding: '12px 15px',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    fontSize: '1em',
-    fontWeight: 'bold',
-    transition: 'background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease',
-    '&:hover': {
-      backgroundColor: 'var(--primary-light)',
-      color: 'var(--primary-dark)',
-    },
-    '&:disabled': {
-      backgroundColor: 'var(--gray-light)',
-      color: 'var(--gray-dark)',
-      cursor: 'not-allowed',
-      opacity: 0.7,
-    },
-  },
-  slotButtonSelected: {
-    backgroundColor: 'var(--primary-blue)',
-    color: 'var(--white)',
-    borderColor: 'var(--primary-blue)',
-  },
-  slotButtonBooked: {
-    backgroundColor: 'var(--gray-light)',
-    color: 'var(--gray-dark)',
-    borderColor: 'var(--gray-dark)',
-    cursor: 'not-allowed',
-  },
-  form: {
-    marginTop: '30px',
-    paddingTop: '20px',
-    borderTop: '1px solid var(--border-color)',
-  },
-  radioGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '10px',
-    marginBottom: '20px',
-  },
-  radioLabel: {
-    display: 'flex',
-    alignItems: 'center',
-    fontSize: '1em',
-    color: 'var(--text-color)',
-    cursor: 'pointer',
-  },
-  radioInput: {
-    marginRight: '10px',
-    transform: 'scale(1.2)',
-  },
-  pickupDetails: {
-    backgroundColor: 'var(--light-bg)',
-    border: '1px dashed var(--border-color)',
-    borderRadius: '8px',
-    padding: '20px',
     marginTop: '15px',
   },
-  infoText: {
-    fontSize: '0.9em',
-    color: 'var(--gray-dark)',
-    fontStyle: 'italic',
-    marginTop: '10px',
-  },
-  submitButton: {
-    backgroundColor: 'var(--accent-pink)',
-    color: 'var(--white)',
-    border: 'none',
-    padding: '15px 30px',
-    borderRadius: '8px',
-    fontSize: '1.2em',
-    fontWeight: 'bold',
+  slotButton: {
+    padding: '10px 15px',
+    border: '1px solid #007bff',
+    borderRadius: '5px',
+    backgroundColor: '#e6f2ff',
+    color: '#007bff',
+    fontSize: '1em',
     cursor: 'pointer',
-    width: '100%',
-    transition: 'background-color 0.3s ease',
-    '&:hover': {
-      backgroundColor: 'var(--accent-pink-dark)',
-    },
-    '&:disabled': {
-      backgroundColor: 'var(--gray-dark)',
-      cursor: 'not-allowed',
-    },
+    transition: 'background-color 0.2s ease, border-color 0.2s ease',
+  },
+  slotButtonHover: {
+    backgroundColor: '#cce0ff',
+  },
+  slotButtonSelected: {
+    backgroundColor: '#007bff',
+    color: 'white',
+    borderColor: '#0056b3',
+  },
+  message: {
+    textAlign: 'center',
+    color: '#666',
+    marginTop: '20px',
+    fontSize: '1.1em',
   },
   errorMessage: {
-    color: 'var(--red)',
-    backgroundColor: 'var(--red-light)',
-    border: '1px solid var(--red)',
-    padding: '10px',
-    borderRadius: '5px',
-    marginBottom: '20px',
     textAlign: 'center',
+    color: 'red',
+    marginTop: '20px',
+    fontSize: '1.1em',
+    fontWeight: 'bold',
   },
   successMessage: {
-    color: 'var(--green)',
-    backgroundColor: 'var(--green-light)',
-    border: '1px solid var(--green)',
-    padding: '10px',
-    borderRadius: '5px',
-    marginBottom: '20px',
     textAlign: 'center',
+    color: 'green',
+    marginTop: '20px',
+    fontSize: '1.1em',
+    fontWeight: 'bold',
   },
 };
+
+// Add hover styles dynamically
+styles.submitButton[':hover'] = styles.submitButtonHover;
+styles.slotButton[':hover'] = styles.slotButtonHover;
+
 
 export default TimeSlotBooking;
