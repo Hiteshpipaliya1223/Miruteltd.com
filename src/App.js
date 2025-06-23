@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { CartProvider } from './context/CartContext'; 
+import { CartProvider } from './context/CartContext';
 
 import Header from "./components/Header";
 import Navigation from "./components/Navigation";
@@ -10,14 +10,18 @@ import BenefitsSection from "./components/BenefitsSection";
 import ProductList from "./components/ProductList";
 import Footer from "./components/Footer";
 
-// Import all the new pages
+// Import all your pages and components
 import ContactUsPage from "./pages/ContactUsPage";
 import FAQPage from "./pages/FAQPage";
 import BlogPage from "./pages/BlogPage";
-import AuthPages from "./pages/AuthPages"; 
-import CartPage from "./pages/CartPage"; 
-import ProductDetailPage from "./pages/ProductDetailPage"; 
-import StitchingAlterationsPage from "./pages/StitchingAlterationsPage"; // <-- NEW IMPORT
+import AuthPages from "./pages/AuthPages";
+import CartPage from "./pages/CartPage";
+import ProductDetailPage from "./pages/ProductDetailPage";
+import StitchingAlterationsPage from "./pages/StitchingAlterationsPage";
+
+// --- NEW/UPDATED IMPORTS ---
+import TimeSlotBooking from './components/TimeSlotBooking'; // <-- Ensure this is imported
+import ProductDisplay from './components/ProductDisplay'; // <-- Your new ProductDisplay component
 
 // import NotFoundPage from "./pages/NotFoundPage"; // You can uncomment this if you create a NotFoundPage.jsx
 
@@ -43,32 +47,40 @@ function App() {
                   </>
                 }
               />
-              
+
               {/* Route for individual Product Detail Pages - IMPORTANT: Place this before /products */}
-              <Route path="/products/:id" element={<ProductDetailPage />} /> 
+              <Route path="/products/:id" element={<ProductDetailPage />} />
 
               {/* Optional: Add a dedicated /products route if you want to separate it from home */}
               <Route path="/products" element={<ProductList />} />
-              
+
               <Route path="/contact-us" element={<ContactUsPage />} />
               <Route path="/faq" element={<FAQPage />} />
               <Route path="/blog" element={<BlogPage />} />
               <Route path="/register" element={<AuthPages defaultTab="register" />} />
               <Route path="/sign-in" element={<AuthPages defaultTab="signIn" />} />
-              
-              {/* Route for the Cart Page */}
-              <Route path="/cart" element={<CartPage />} /> 
 
-              {/* NEW ROUTE FOR STITCHING & ALTERATIONS */}
+              {/* Route for the Cart Page */}
+              <Route path="/cart" element={<CartPage />} />
+
+              {/* ROUTE FOR STITCHING & ALTERATIONS PAGE (contains booking) */}
               <Route path="/stitching-alterations" element={<StitchingAlterationsPage />} />
-              
+
+              {/* NEW ROUTE FOR TIME SLOT BOOKING (if you want it separate) */}
+              {/* If StitchingAlterationsPage already contains TimeSlotBooking, you might not need this separate route.
+                  I'm adding it as a separate option for flexibility. */}
+              <Route path="/book-a-slot" element={<TimeSlotBooking />} /> {/* Example dedicated route for booking */}
+
+              {/* NEW ROUTE FOR THE PRODUCT DISPLAY/GALLERY YOU JUST CREATED */}
+              <Route path="/our-collection" element={<ProductDisplay />} />
+
               {/* Catch-all for undefined routes */}
               <Route path="*" element={<h1>404: Page Not Found</h1>} />
               {/* Or if you create a NotFoundPage.jsx: <Route path="*" element={<NotFoundPage />} /> */}
             </Routes>
           </main>
-          
-          <Footer /> 
+
+          <Footer />
         </div>
       </Router>
     </CartProvider>

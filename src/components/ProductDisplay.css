@@ -1,0 +1,146 @@
+/* Import a Google Font for "nice font style" */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Open+Sans:wght@400;600&display=swap');
+
+.product-display-container {
+    font-family: 'Open Sans', sans-serif; /* Default font */
+    color: #333;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.main-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.main-title {
+    font-family: 'Playfair Display', serif; /* Elegant font for titles */
+    font-size: 3.5em;
+    color: #2c3e50; /* Darker blue/grey for heading */
+    margin-bottom: 20px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.category-nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 25px; /* Spacing between categories */
+    margin-top: 20px;
+    padding: 15px 0;
+    background-color: #e0f2f7; /* Light blue background for nav */
+    border-radius: 5px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.category-item {
+    text-decoration: none;
+    color: #007bff; /* Blue for links */
+    font-weight: 600;
+    font-size: 1.1em;
+    padding: 8px 15px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    background-color: #ffffff; /* White background for items */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.category-item:hover {
+    background-color: #007bff;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.display-sections {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+    gap: 30px; /* Space between sections */
+}
+
+.display-section {
+    position: relative;
+    height: 400px; /* Fixed height for image sections */
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end; /* Align content to the bottom */
+    padding: 20px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease-in-out;
+}
+
+.display-section:hover {
+    transform: translateY(-10px);
+}
+
+.overlay-content {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0)); /* Gradient overlay for text readability */
+    color: white;
+    padding-top: 80px; /* Push content down from top */
+    width: 100%;
+    text-align: center;
+}
+
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2em;
+    margin-bottom: 10px;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.section-description {
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    line-height: 1.5;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.section-link {
+    display: inline-block;
+    background-color: #ff6f61; /* Vibrant orange/red for call to action */
+    color: white;
+    padding: 10px 25px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.section-link:hover {
+    background-color: #e65c50;
+    transform: translateY(-2px);
+}
+
+/* Basic responsiveness */
+@media (max-width: 768px) {
+    .main-title {
+        font-size: 2.5em;
+    }
+    .category-nav {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .category-item {
+        width: fit-content;
+        margin: 0 auto;
+    }
+    .display-section {
+        height: 350px;
+    }
+    .section-title {
+        font-size: 1.8em;
+    }
+    .section-description {
+        font-size: 1em;
+    }
+}
