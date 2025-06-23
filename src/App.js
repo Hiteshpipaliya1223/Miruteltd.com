@@ -20,10 +20,10 @@ import ProductDetailPage from "./pages/ProductDetailPage";
 import StitchingAlterationsPage from "./pages/StitchingAlterationsPage";
 
 // --- NEW/UPDATED IMPORTS ---
-import TimeSlotBooking from './components/TimeSlotBooking'; // <-- Ensure this is imported
-import ProductDisplay from './components/ProductDisplay'; // <-- Your new ProductDisplay component
+import TimeSlotBooking from './components/TimeSlotBooking';
+import ProductDisplay from './components/ProductDisplay';
 
-// import NotFoundPage from "./pages/NotFoundPage"; // You can uncomment this if you create a NotFoundPage.jsx
+// import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   return (
@@ -40,14 +40,14 @@ function App() {
                 path="/"
                 element={
                   <>
+                    {/* --- MOVED ProductDisplay TO THE TOP --- */}
+                    <ProductDisplay />
+                    {/* ------------------------------------ */}
+
                     <HeroSection />
                     <BenefitsSection />
                     <h2 style={appStyles.productListHeading}>Our Latest Collection</h2>
                     <ProductList />
-                    {/* --- ADDED ProductDisplay DIRECTLY TO HOMEPAGE --- */}
-                    {/* This will make the "OUR SERVICES & PRODUCTS" section appear on the main '/' route */}
-                    <ProductDisplay />
-                    {/* ------------------------------------------------ */}
                   </>
                 }
               />
@@ -71,16 +71,13 @@ function App() {
               <Route path="/stitching-alterations" element={<StitchingAlterationsPage />} />
 
               {/* NEW ROUTE FOR TIME SLOT BOOKING (if you want it separate) */}
-              {/* If StitchingAlterationsPage already contains TimeSlotBooking, you might not need this separate route.
-                  I'm adding it as a separate option for flexibility. */}
-              <Route path="/book-a-slot" element={<TimeSlotBooking />} /> {/* Example dedicated route for booking */}
+              <Route path="/book-a-slot" element={<TimeSlotBooking />} />
 
               {/* Keep this route for /our-collection if you still want a dedicated page for it */}
               <Route path="/our-collection" element={<ProductDisplay />} />
 
               {/* Catch-all for undefined routes */}
               <Route path="*" element={<h1>404: Page Not Found</h1>} />
-              {/* Or if you create a NotFoundPage.jsx: <Route path="*" element={<NotFoundPage />} /> */}
             </Routes>
           </main>
 
