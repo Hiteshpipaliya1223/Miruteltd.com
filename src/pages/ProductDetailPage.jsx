@@ -1,11 +1,10 @@
 // src/pages/ProductDetailPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useCart } from '../context/CartContext'; // <-- IMPORT useCart
+import { useCart } from '../context/CartContext'; 
 import './ProductDetailPage.css'; 
 
-// --- DUMMY PRODUCT DATA ---
-// IMPORTANT: ID 1 is the only product remaining as per your request.
+// --- DUMMY PRODUCT DATA --- (Keep your existing dummyProducts array here)
 const dummyProducts = [
   {
     id: 1, 
@@ -16,81 +15,20 @@ const dummyProducts = [
     material: '80% Nylon, 20% Spandex',
     care: 'Hand wash cold, line dry',
     colorOptions: [
-      {
-        name: 'Black',
-        hexCode: '#000000',
-        images: [
-          '/images/black_bra_side.png',
-          '/images/black_bra_side1.png',
-          '/images/black_bra_side2.png',
-          '/images/black_bra_side3.png',
-          // Add more black bra images here if you have them
-        ]
-      },
-      {
-        name: 'Brown',
-        hexCode: '#A52A2A',
-        images: [
-          '/images/brown_bra_side.png',
-          '/images/brown_bra_side1.png',
-          '/images/brown_bra_side2.png',
-        ]
-      },
-      {
-        name: 'Grey',
-        hexCode: '#808080',
-        images: [
-          '/images/grey_bra_side.png',
-          '/images/grey_bra_side1.png',
-          '/images/grey_bra_side2.png',
-          '/images/grey_bra_side3.png',
-          '/images/grey_bra_side4.png',
-        ]
-      },
-      {
-        name: 'Light Green',
-        hexCode: '#90EE90',
-        images: [
-          '/images/light_green_bra.png',
-          '/images/light_green_bra1.png',
-          '/images/light_green_bra2.png',
-        ]
-      },
-      {
-        name: 'Purple',
-        hexCode: '#800080',
-        images: [
-          '/images/purple_bra_side.png',
-          '/images/purple_bra_side1.png',
-          '/images/purple_bra_side2.png',
-          '/images/purple_bra_side3.png',
-        ]
-      },
-      {
-        name: 'Nude',
-        hexCode: '#F0D5BE',
-        images: [
-          '/images/nude_bra_side.png',
-          '/images/nude_bra_side1.png',
-          '/images/nude_bra_side2.png',
-        ]
-      },
-      {
-        name: 'Sky',
-        hexCode: '#87CEEB',
-        images: [
-          '/images/sky_bra_side.png',
-          '/images/sky_bra_side1.png',
-        ]
-      },
+      { name: 'Black', hexCode: '#000000', images: ['/images/black_bra_side.png', '/images/black_bra_side1.png', '/images/black_bra_side2.png', '/images/black_bra_side3.png'] },
+      { name: 'Brown', hexCode: '#A52A2A', images: ['/images/brown_bra_side.png', '/images/brown_bra_side1.png', '/images/brown_bra_side2.png'] },
+      { name: 'Grey', hexCode: '#808080', images: ['/images/grey_bra_side.png', '/images/grey_bra_side1.png', '/images/grey_bra_side2.png', '/images/grey_bra_side3.png', '/images/grey_bra_side4.png'] },
+      { name: 'Light Green', hexCode: '#90EE90', images: ['/images/light_green_bra.png', '/images/light_green_bra1.png', '/images/light_green_bra2.png'] },
+      { name: 'Purple', hexCode: '#800080', images: ['/images/purple_bra_side.png', '/images/purple_bra_side1.png', '/images/purple_bra_side2.png', '/images/purple_bra_side3.png'] },
+      { name: 'Nude', hexCode: '#F0D5BE', images: ['/images/nude_bra_side.png', '/images/nude_bra_side1.png', '/images/nude_bra_side2.png'] },
+      { name: 'Sky', hexCode: '#87CEEB', images: ['/images/sky_bra_side.png', '/images/sky_bra_side1.png'] },
     ]
   },
-  // Products with ID 2, 3, and 4 are removed as per your request.
 ];
 
 const ProductDetailPage = () => {
   const { id } = useParams();
-  const { addToCart } = useCart(); // <-- Use useCart hook here
+  const { addToCart } = useCart();
   const product = dummyProducts.find(p => p.id === parseInt(id)); 
 
   const [selectedColor, setSelectedColor] = useState(null);
@@ -113,17 +51,15 @@ const ProductDetailPage = () => {
     return <div style={{ padding: '50px', textAlign: 'center', fontSize: '1.2em' }}>Product Not Found!</div>;
   }
 
-  // Function to handle adding to cart from detail page
   const handleAddToCart = () => {
     if (selectedSize && selectedColor) {
-      // Create a product object that includes selected color and size for the cart
       const productToAdd = {
         ...product,
-        id: `${product.id}-${selectedColor.name}-${selectedSize}`, // Create a unique ID for cart item
-        originalId: product.id, // Keep original product ID if needed
+        id: `${product.id}-${selectedColor.name}-${selectedSize}`,
+        originalId: product.id,
         selectedColor: selectedColor.name,
         selectedSize: selectedSize,
-        image: mainImage, // Use the currently selected main image for cart display
+        image: mainImage,
       };
       addToCart(productToAdd);
       alert(`${productToAdd.name} (${productToAdd.selectedColor}, Size ${productToAdd.selectedSize}) added to cart!`);
@@ -158,7 +94,8 @@ const ProductDetailPage = () => {
         
         {/* Color Options */}
         {product.colorOptions && product.colorOptions.length > 0 && (
-          <div className="product-attribute" style={{ marginBottom: '20px' }}>
+          // Apply attribute box styles here
+          <div style={{...productAttributeBoxStyles, marginBottom: '20px' }}> {/* Combined styles */}
             <span className="attribute-label">Colour:</span>
             <div className="color-options">
               {product.colorOptions.map((color, index) => (
@@ -178,7 +115,8 @@ const ProductDetailPage = () => {
 
         {/* Size Options */}
         {product.sizes && (
-          <div className="product-attribute" style={{ marginBottom: '20px' }}> 
+          // Apply attribute box styles here
+          <div style={{...productAttributeBoxStyles, marginBottom: '20px' }}> {/* Combined styles */}
             <span className="attribute-label">Sizes:</span>
             <div className="size-options">
               {product.sizes.map((size, index) => (
@@ -194,27 +132,41 @@ const ProductDetailPage = () => {
           </div>
         )}
 
-        {/* Material and Care remain visible as before */}
+        {/* Material */}
         {product.material && (
-          <div className="product-attribute" style={{ marginBottom: '10px' }}>
+          // Apply attribute box styles here
+          <div style={{...productAttributeBoxStyles, marginBottom: '10px' }}> {/* Combined styles */}
             <span className="attribute-label">Material:</span> {product.material}
           </div>
         )}
+        
+        {/* Care */}
         {product.care && (
-          <div className="product-attribute" style={{ marginBottom: '20px' }}>
+          // Apply attribute box styles here
+          <div style={{...productAttributeBoxStyles, marginBottom: '20px' }}> {/* Combined styles */}
             <span className="attribute-label">Care:</span> {product.care}
           </div>
         )}
 
         <button 
           className="add-to-cart-button"
-          onClick={handleAddToCart} // <-- Call the new handler
+          onClick={handleAddToCart}
         >
           Add to Cart
         </button>
       </div>
     </div>
   );
+};
+
+// --- New Styles for the attribute boxes ---
+const productAttributeBoxStyles = {
+    backgroundColor: '#f9f9f9', // A very light grey for the box background
+    border: '1px solid #eee', // A subtle light border
+    borderRadius: '8px', // Slightly rounded corners
+    padding: '15px', // Padding inside the box
+    boxShadow: '0 2px 5px rgba(0,0,0,0.05)', // A very soft shadow for depth
+    // Note: marginBottom is applied directly in the JSX as it varies for each attribute
 };
 
 export default ProductDetailPage;
