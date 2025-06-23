@@ -1,76 +1,70 @@
 // src/pages/StitchingAlterationsPage.jsx
+
 import React from 'react';
-import TimeSlotBooking from '../components/TimeSlotBooking'; // <-- CORRECTED IMPORT PATH
+// Assuming you have some existing content for this page,
+// or we can add a basic structure.
+import TimeSlotBooking from '../components/TimeSlotBooking'; // <--- IMPORT IT HERE!
 
 const StitchingAlterationsPage = () => {
   return (
-    // The outermost div needs to be the single parent.
-    // Ensure you use the styles defined within this component or remove them if not needed.
-    <div style={pageStyles.container}> {/* Using a local style object */}
-      <h1 style={pageStyles.heading}>Stitching & Alterations Service</h1> {/* This was the 'h1' line from your previous code in the image */}
+    <div style={pageStyles.container}>
+      <h1 style={pageStyles.heading}>Stitching & Alterations Services</h1>
       <p style={pageStyles.paragraph}>
-        Welcome to our premium stitching and alterations service. Whether you need a custom-made garment, a perfect fit for your existing clothes, or intricate repairs, our skilled tailors are here to bring your vision to life.
+        We offer expert stitching and alteration services to perfect your garments.
+        Book a consultation or service slot below.
       </p>
-      <p style={pageStyles.paragraph}>
-        Book your preferred time slot below for a consultation or service appointment. We look forward to providing you with impeccable craftsmanship!
-      </p>
+      
+      {/* --- RENDER THE BOOKING COMPONENT HERE --- */}
+      <TimeSlotBooking /> 
 
-      {/* Your Time Slot Booking component goes here */}
-      <TimeSlotBooking />
-
-      <div style={pageStyles.servicesSection}>
-        <h2 style={pageStyles.servicesHeading}>Our Services Include:</h2>
-        <ul style={pageStyles.servicesList}>
-          <li style={pageStyles.servicesListItem}>Custom Dressmaking</li>
-          <li style={pageStyles.servicesListItem}>Bridal & Formal Wear Alterations</li>
-          <li style={pageStyles.servicesListItem}>Jeans & Trouser Hemming</li>
-          <li style={pageStyles.servicesListItem}>Jacket & Coat Alterations</li>
-          <li style={pageStyles.servicesListItem}>Button & Zipper Repair</li>
-          <li style={pageStyles.servicesListItem}>General Clothing Repair</li>
+      {/* Add any other content related to stitching/alterations here */}
+      <div style={pageStyles.section}>
+        <h2 style={pageStyles.subHeading}>Our Services Include:</h2>
+        <ul>
+          <li>Custom garment stitching</li>
+          <li>Hemming and lengthening</li>
+          <li>Waist adjustments</li>
+          <li>Zipper and button repair/replacement</li>
+          <li>And much more!</li>
         </ul>
       </div>
+
     </div>
   );
 };
 
-// Define styles locally for this component
 const pageStyles = {
     container: {
         padding: '20px',
-        maxWidth: '960px',
-        margin: '40px auto',
-        backgroundColor: 'var(--light-bg)', // Assuming var(--light-bg) is defined in your CSS
+        maxWidth: '900px',
+        margin: '20px auto',
+        backgroundColor: '#fff',
         borderRadius: '8px',
-        boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
     },
     heading: {
         textAlign: 'center',
-        color: 'var(--primary-dark)', // Assuming var(--primary-dark) is defined
-        marginBottom: '30px',
+        color: 'var(--primary-blue)',
+        marginBottom: '20px',
+        fontSize: '2.5em',
     },
     paragraph: {
-        fontSize: '1.1em',
+        textAlign: 'center',
+        marginBottom: '30px',
         lineHeight: '1.6',
-        color: 'var(--text-color)', // Assuming var(--text-color) is defined
-        marginBottom: '20px',
-    },
-    servicesSection: {
-        borderTop: '1px solid var(--border-color)', // Assuming var(--border-color) is defined
-        paddingTop: '30px',
-        marginTop: '40px',
-    },
-    servicesHeading: {
-        color: 'var(--primary-dark)',
-        marginBottom: '15px',
-    },
-    servicesList: {
-        listStyleType: 'disc',
-        paddingLeft: '25px',
         color: 'var(--text-color)',
     },
-    servicesListItem: {
-        marginBottom: '10px',
+    section: {
+        marginTop: '40px',
+        borderTop: '1px solid var(--border-color)',
+        paddingTop: '30px',
+    },
+    subHeading: {
+        color: 'var(--secondary-dark)',
+        marginBottom: '15px',
+        fontSize: '1.8em',
     }
+    // You can add more styles as needed
 };
 
 export default StitchingAlterationsPage;
