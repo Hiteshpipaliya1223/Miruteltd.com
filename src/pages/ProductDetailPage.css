@@ -1,0 +1,230 @@
+/* src/pages/ProductDetailPage.css */
+
+.product-detail-container {
+    display: flex;
+    flex-wrap: wrap; /* Allows wrapping on smaller screens */
+    gap: 40px;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+}
+
+/* Image Gallery Section */
+.image-gallery {
+    flex: 1; /* Takes up available space */
+    min-width: 300px; /* Minimum width before wrapping */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main-image {
+    width: 100%;
+    max-width: 500px; /* Limit main image size */
+    height: auto;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.main-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain; /* Ensures the whole image is visible */
+    max-height: 500px; /* Prevent excessively tall images */
+}
+
+.thumbnails {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
+    max-width: 500px; /* Match main image max-width */
+}
+
+.thumbnail {
+    width: 80px; /* Fixed width for thumbnails */
+    height: 80px; /* Fixed height for thumbnails */
+    border: 2px solid #eee;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.3s ease, transform 0.2s ease;
+    object-fit: cover; /* Crops image to fill the thumbnail */
+}
+
+.thumbnail:hover {
+    border-color: #007bff;
+    transform: translateY(-2px);
+}
+
+.thumbnail.active {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
+}
+
+/* Product Info Section */
+.product-info {
+    flex: 2; /* Takes up more space */
+    min-width: 300px; /* Minimum width before wrapping */
+    padding-left: 20px; /* Space from image gallery */
+}
+
+.product-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.5em;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.product-price {
+    font-size: 1.8em;
+    color: #28a745; /* Green for price */
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.product-description {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+/* Attributes (Sizes, Material, Care) */
+.product-attribute {
+    margin-bottom: 15px; /* Spacing between attribute blocks */
+    display: block; /* Ensures each attribute is on its own line */
+}
+
+.attribute-label {
+    font-weight: bold;
+    margin-right: 5px; /* Space between label and value */
+    color: #333; /* Darker color for labels */
+    display: inline-block; /* Allows it to sit next to the value */
+}
+
+/* Size Options */
+.size-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px; /* Space between size buttons */
+    margin-top: 5px; /* Space from the "Sizes:" label */
+}
+
+.size-button {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    font-size: 0.95em;
+    transition: all 0.2s ease;
+}
+
+.size-button:hover {
+    background-color: #e0e0e0;
+    border-color: #bbb;
+}
+
+.size-button.selected { /* Class added by JS when a size is selected */
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* Color Options */
+.color-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Space between color swatches */
+    margin-top: 5px;
+}
+
+.color-swatch {
+    width: 30px; /* Size of the color circle/square */
+    height: 30px;
+    border-radius: 50%; /* Makes them circular */
+    border: 2px solid #ddd; /* Default border */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex; /* For centering content if needed (e.g. for white) */
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    /* For white color, make sure it has a distinct border even when not active */
+    background-clip: padding-box; /* Ensures background color respects padding box, preventing color from bleeding under border */
+}
+
+.color-swatch:hover {
+    transform: scale(1.1);
+    border-color: #999;
+}
+
+.color-swatch.active {
+    border-color: #007bff; /* Highlight active color */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
+    transform: scale(1.1);
+}
+
+/* Specific styling for white swatch to make it visible against a light background */
+/* We target it by its inline style because hex codes are used for background-color */
+.color-swatch[style*="background-color: rgb(255, 255, 255)"] {
+    border: 1px solid #ccc; /* Stronger border for white */
+}
+
+.color-swatch[style*="background-color: rgb(255, 255, 255)"].active {
+     border-color: #007bff; /* Active border for white */
+     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .product-detail-container {
+        flex-direction: column; /* Stack image and info */
+        padding: 20px;
+        gap: 30px;
+    }
+    .product-info {
+        padding-left: 0; /* Remove left padding when stacked */
+        text-align: center;
+    }
+    .product-name {
+        font-size: 2em;
+    }
+    .product-price {
+        font-size: 1.5em;
+    }
+    .main-image {
+        max-width: 100%; /* Allow full width on small screens */
+    }
+    .thumbnails {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-detail-container {
+        padding: 15px;
+    }
+    .product-name {
+        font-size: 1.8em;
+    }
+    .add-to-cart-button {
+        width: 100%; /* Full width button on very small screens */
+        padding: 12px 0;
+    }
+    .thumbnail {
+        width: 60px;
+        height: 60px;
+    }
+}

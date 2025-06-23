@@ -1,7 +1,7 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
 import StarRating from './StarRating';
-import { Link } from 'react-router-dom'; // <--- Import Link
+import { Link } from 'react-router-dom';
 
 const ProductList = () => {
   const { addToCart } = useCart(); 
@@ -10,7 +10,7 @@ const ProductList = () => {
     {
       id: 1,
       name: 'Seamless Black Push-Up Bra',
-      price: 18.99,
+      price: 11.99,
       image: 'https://i.imgur.com/Kbz8ZDD.png',
       rating: 4.5,
       reviews: 120,
@@ -18,7 +18,7 @@ const ProductList = () => {
     {
       id: 2,
       name: 'Comfort Flex Nude Bra',
-      price: 16.50,
+      price: 11.99,
       image: 'https://i.imgur.com/8sYLXVq.png',
       rating: 4.8,
       reviews: 95,
@@ -26,7 +26,7 @@ const ProductList = () => {
     {
       id: 3,
       name: 'Soft Touch Lace Bralette',
-      price: 22.00,
+      price: 11.99,
       image: 'https://i.imgur.com/M2Q9xff.png',
       rating: 4.2,
       reviews: 78,
@@ -34,7 +34,7 @@ const ProductList = () => {
     {
       id: 4,
       name: 'Everyday Support White Bra',
-      price: 15.99,
+      price: 11.99,
       image: 'https://via.placeholder.com/200x200?text=White+Bra', 
       rating: 4.6,
       reviews: 150,
@@ -46,7 +46,6 @@ const ProductList = () => {
       <div style={productListStyles.grid}>
         {products.map((product) => (
           <div key={product.id} style={productListStyles.productCard}>
-            {/* Wrap the image and name with Link to the product detail page */}
             <Link to={`/products/${product.id}`} style={productListStyles.productLink}>
               <img src={product.image} alt={product.name} style={productListStyles.productImage} />
               <h3 style={productListStyles.productName}>{product.name}</h3>
@@ -89,8 +88,8 @@ const productListStyles = {
   },
   productCard: {
     border: '1px solid var(--border-color)',
-    borderRadius: '10px',
-    padding: '25px',
+    borderRadius: '10px', // M&S has slightly less rounded corners, you can try '5px' if you want
+    padding: '10px', // REDUCED PADDING
     textAlign: 'center',
     backgroundColor: 'var(--light-bg)',
     boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
@@ -99,34 +98,32 @@ const productListStyles = {
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
-  // --- New style for the Link wrapper ---
   productLink: {
-    textDecoration: 'none', // Remove underline from link
-    color: 'inherit', // Inherit text color
-    display: 'block', // Make the link block level to wrap content
-    marginBottom: '20px', // Space between linked content and price/rating
+    textDecoration: 'none',
+    color: 'inherit',
+    display: 'block',
+    marginBottom: '10px', // ADJUSTED MARGIN
   },
-  // --- End new style ---
   productImage: {
     width: '100%',
-    height: '220px',
-    objectFit: 'contain',
-    borderRadius: '8px',
-    // Removed marginBottom here as productLink now controls spacing
+    height: '280px', // INCREASED HEIGHT FOR A MORE PORTRAIT ASPECT RATIO
+    objectFit: 'contain', // Keeps the entire image visible within the bounds
+    borderRadius: '5px', // SLIGHTLY REDUCED BORDER RADIUS FOR IMAGE
     border: '1px solid #f0f0f0',
   },
   productName: {
-    fontSize: '1.3em',
-    color: 'var(--secondary-dark)',
-    marginTop: '10px', // Space between image and name
-    marginBottom: '0', // Removed marginBottom here as productLink now controls spacing
-    fontWeight: '600',
+    fontSize: '1em', // REDUCED FONT SIZE for a more subtle look
+    color: '#333', // CHANGED TO A DARK GREY
+    marginTop: '5px', // REDUCED MARGIN
+    marginBottom: '5px', // ADDED SMALL BOTTOM MARGIN
+    fontWeight: 'normal', // CHANGED TO NORMAL WEIGHT
+    lineHeight: '1.3', // Added line height for readability
   },
   productPrice: {
-    fontSize: '1.6em',
+    fontSize: '1.1em', // REDUCED FONT SIZE to make it less dominant
     fontWeight: 'bold',
-    color: 'var(--primary-blue)',
-    marginBottom: '15px',
+    color: '#333', // CHANGED TO A DARK GREY
+    marginBottom: '5px', // REDUCED MARGIN
   },
   productRating: {
     fontSize: '1em',
