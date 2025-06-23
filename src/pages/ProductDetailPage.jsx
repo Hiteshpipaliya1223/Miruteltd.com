@@ -1,5 +1,7 @@
+// src/pages/ProductDetailPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useCart } from '../context/CartContext'; // <-- IMPORT useCart
 import './ProductDetailPage.css'; 
 
 // --- DUMMY PRODUCT DATA ---
@@ -88,6 +90,7 @@ const dummyProducts = [
 
 const ProductDetailPage = () => {
   const { id } = useParams();
+  const { addToCart } = useCart(); // <-- Use useCart hook here
   const product = dummyProducts.find(p => p.id === parseInt(id)); 
 
   const [selectedColor, setSelectedColor] = useState(null);
@@ -109,6 +112,25 @@ const ProductDetailPage = () => {
   if (!product) {
     return <div style={{ padding: '50px', textAlign: 'center', fontSize: '1.2em' }}>Product Not Found!</div>;
   }
+
+  // Function to handle adding to cart from detail page
+  const handleAddToCart = () => {
+    if (selectedSize && selectedColor) {
+      // Create a product object that includes selected color and size for the cart
+      const productToAdd = {
+        ...product,
+        id: `${product.id}-${selectedColor.name}-${selectedSize}`, // Create a unique ID for cart item
+        originalId: product.id, // Keep original product ID if needed
+        selectedColor: selectedColor.name,
+        selectedSize: selectedSize,
+        image: mainImage, // Use the currently selected main image for cart display
+      };
+      addToCart(productToAdd);
+      alert(`${productToAdd.name} (${productToAdd.selectedColor}, Size ${productToAdd.selectedSize}) added to cart!`);
+    } else {
+      alert('Please select a size and color before adding to cart.');
+    }
+  };
 
   return (
     <div className="product-detail-container">
@@ -184,7 +206,10 @@ const ProductDetailPage = () => {
           </div>
         )}
 
-        <button className="add-to-cart-button">
+        <button 
+          className="add-to-cart-button"
+          onClick={handleAddToCart} // <-- Call the new handler
+        >
           Add to Cart
         </button>
       </div>

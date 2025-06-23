@@ -1,10 +1,11 @@
+// src/components/ProductList.jsx
 import React from 'react';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../context/CartContext'; // <-- Make sure this is imported
 import StarRating from './StarRating';
 import { Link } from 'react-router-dom';
 
 const ProductList = () => {
-  const { addToCart } = useCart(); 
+  const { addToCart } = useCart(); // <-- useCart hook is used here
 
   const products = [
     {
@@ -59,7 +60,7 @@ const ProductList = () => {
             <button 
               style={productListStyles.addToCartButton}
               onClick={() => {
-                addToCart(product);
+                addToCart(product); // <-- This is the crucial part that adds to cart
               }}
             >
               Add to Cart
@@ -88,8 +89,8 @@ const productListStyles = {
   },
   productCard: {
     border: '1px solid var(--border-color)',
-    borderRadius: '10px', // M&S has slightly less rounded corners, you can try '5px' if you want
-    padding: '10px', // REDUCED PADDING
+    borderRadius: '10px',
+    padding: '10px',
     textAlign: 'center',
     backgroundColor: 'var(--light-bg)',
     boxShadow: '0 4px 15px rgba(0,0,0,0.06)',
@@ -102,28 +103,28 @@ const productListStyles = {
     textDecoration: 'none',
     color: 'inherit',
     display: 'block',
-    marginBottom: '10px', // ADJUSTED MARGIN
+    marginBottom: '10px',
   },
   productImage: {
     width: '100%',
-    height: '280px', // INCREASED HEIGHT FOR A MORE PORTRAIT ASPECT RATIO
-    objectFit: 'contain', // Keeps the entire image visible within the bounds
-    borderRadius: '5px', // SLIGHTLY REDUCED BORDER RADIUS FOR IMAGE
+    height: '280px',
+    objectFit: 'contain',
+    borderRadius: '5px',
     border: '1px solid #f0f0f0',
   },
   productName: {
-    fontSize: '1em', // REDUCED FONT SIZE for a more subtle look
-    color: '#333', // CHANGED TO A DARK GREY
-    marginTop: '5px', // REDUCED MARGIN
-    marginBottom: '5px', // ADDED SMALL BOTTOM MARGIN
-    fontWeight: 'normal', // CHANGED TO NORMAL WEIGHT
-    lineHeight: '1.3', // Added line height for readability
+    fontSize: '1em',
+    color: '#333',
+    marginTop: '5px',
+    marginBottom: '5px',
+    fontWeight: 'normal',
+    lineHeight: '1.3',
   },
   productPrice: {
-    fontSize: '1.1em', // REDUCED FONT SIZE to make it less dominant
+    fontSize: '1.1em',
     fontWeight: 'bold',
-    color: '#333', // CHANGED TO A DARK GREY
-    marginBottom: '5px', // REDUCED MARGIN
+    color: '#333',
+    marginBottom: '5px',
   },
   productRating: {
     fontSize: '1em',
@@ -142,11 +143,9 @@ const productListStyles = {
     transition: 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease',
     boxShadow: '0 4px 12px rgba(253, 126, 20, 0.2)',
     marginTop: 'auto',
-    '&:hover': {
-      backgroundColor: '#e66d00',
-      transform: 'translateY(-2px)',
-      boxShadow: '0 6px 15px rgba(253, 126, 20, 0.3)',
-    },
+    // Note: ':hover' styles in JS objects like this don't work directly in React's `style` prop.
+    // They are for CSS-in-JS libraries or you'd handle hover states with CSS classes.
+    // '&:hover': { backgroundColor: '#e66d00', transform: 'translateY(-2px)', boxShadow: '0 6px 15px rgba(253, 126, 20, 0.3)' },
   },
   '@media (max-width: 768px)': {
     grid: {
