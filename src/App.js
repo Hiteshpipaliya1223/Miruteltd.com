@@ -44,6 +44,10 @@ function App() {
                     <BenefitsSection />
                     <h2 style={appStyles.productListHeading}>Our Latest Collection</h2>
                     <ProductList />
+                    {/* --- ADDED ProductDisplay DIRECTLY TO HOMEPAGE --- */}
+                    {/* This will make the "OUR SERVICES & PRODUCTS" section appear on the main '/' route */}
+                    <ProductDisplay />
+                    {/* ------------------------------------------------ */}
                   </>
                 }
               />
@@ -71,7 +75,7 @@ function App() {
                   I'm adding it as a separate option for flexibility. */}
               <Route path="/book-a-slot" element={<TimeSlotBooking />} /> {/* Example dedicated route for booking */}
 
-              {/* NEW ROUTE FOR THE PRODUCT DISPLAY/GALLERY YOU JUST CREATED */}
+              {/* Keep this route for /our-collection if you still want a dedicated page for it */}
               <Route path="/our-collection" element={<ProductDisplay />} />
 
               {/* Catch-all for undefined routes */}
