@@ -1,33 +1,33 @@
 // src/components/ServicesSection.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './ServicesSection.css'; // You will create this CSS file next
+import './ServicesSection.css'; // Ensure this CSS file exists and has your styling
 
-// Data for the three services
-const dummyServices = [
+// Data for the three services, updated with precise PUBLIC image paths and extensions
+const servicesData = [
   {
     id: 1,
-    title: "Effortless Comfort, Empowering Style",
-    description: "Discover our meticulously crafted collection of women's bras, where unparalleled comfort meets sophisticated design. Designed to provide exceptional support and a flawless fit, our bras empower you to feel confident and beautiful, every day.",
+    title: "Ultimate Comfort, Perfect Fit Bras",
+    description: "Explore our curated collection of women's bras, crafted for unparalleled comfort and a flawless fit. Our designs provide exceptional support, empowering you to feel confident and beautiful every day.",
     buttonText: "Explore Bras →",
-    link: "/bras", // This link will go to your ProductList page (Women's Bras)
-    imageUrl: "/images/bras.jpg" // Path to your bras image
+    link: "/bras", // This link will go to your ProductList page filtered for Bras
+    imageUrl: "/images/purple_bra_side2.png" // Confirmed: .jpg extension
   },
   {
     id: 2,
-    title: "Nurturing Dreams, Designed with Love",
-    description: "Create a serene and safe haven for your little one with our exquisite range of baby beds. Crafted with the utmost care for safety, comfort, and timeless style, our beds provide the perfect foundation for peaceful nights and sweet dreams.",
+    title: "Safe Havens for Little Ones: Baby Beds",
+    description: "Discover our exquisite range of baby beds, designed to create a serene and safe haven. Each bed is crafted with utmost care for safety, comfort, and timeless style, providing the perfect foundation for peaceful nights.",
     buttonText: "View Baby Beds →",
-    link: "/baby-beds", // New page for baby beds
-    imageUrl: "/images/babybed.jpg" // Path to your babybed image
+    link: "/baby-beds", // Link to your new Baby Beds page
+    imageUrl: "/images/baby-beds.png" // Confirmed: .png extension
   },
   {
     id: 3,
-    title: "Expert Tailoring Services",
-    description: "From precise alterations and custom fittings to bespoke designs and garment repairs, our expert tailoring services ensure your clothing fits flawlessly and reflects your unique style. Revitalize your wardrobe with us.",
+    title: "Tailoring & Alteration Services",
+    description: "Experience our expert tailoring and alteration services, from precise custom fittings to garment repairs. We ensure your clothing fits flawlessly and reflects your unique style, helping you revitalize your entire wardrobe.",
     buttonText: "Explore Services →",
-    link: "/tailoring-services", // New combined page for tailoring
-    imageUrl: "/images/custom-design.jpg" // Path to one of your tailoring images
+    link: "/tailoring-services", // Link to your new combined tailoring page
+    imageUrl: "/images/repair-services.png" // Confirmed: .png extension
   }
 ];
 
@@ -36,7 +36,7 @@ const ServicesSection = () => {
     <div className="services-section-container">
       <h2 className="section-title">OUR SERVICES & PRODUCTS</h2>
       <div className="service-cards-grid">
-        {dummyServices.map(service => (
+        {servicesData.map(service => (
           <div key={service.id} className="service-card">
             <img src={service.imageUrl} alt={service.title} className="service-card-image" />
             <div className="service-card-content">

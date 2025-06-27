@@ -42,37 +42,36 @@ const BenefitsSection = () => {
 
 const benefitsStyles = {
   container: {
-    backgroundColor: 'var(--white)', // White background for the section
-    padding: '60px 20px', // More padding
-    margin: '40px auto', // Increased margin and centered
-    borderRadius: '12px', // More rounded corners
-    boxShadow: '0 8px 30px rgba(0,0,0,0.08)', // Soft, professional shadow
-    maxWidth: '1200px',
+    backgroundColor: 'var(--white)', // Clean background
+    padding: '80px 20px',
     textAlign: 'center',
+    fontFamily: 'inherit',
   },
   heading: {
-    fontSize: '2.8em', // Larger heading
-    color: 'var(--secondary-dark)', // Dark text
-    marginBottom: '50px', // More space below heading
-    fontWeight: '700', // Bolder heading
+    fontSize: '3em',
+    color: 'var(--secondary-dark)',
+    marginBottom: '50px',
+    fontWeight: '700',
   },
   grid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', // Responsive grid, slightly wider min
-    gap: '40px', // More spacing between cards
-    justifyContent: 'center',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', // Responsive grid
+    gap: '30px', // Space between cards
+    maxWidth: '1200px',
+    margin: '0 auto',
   },
   benefitCard: {
-    backgroundColor: 'var(--light-bg)', // Light background for cards
+    backgroundColor: 'var(--light-bg)', // Lighter background for cards
     padding: '35px', // More padding inside cards
     borderRadius: '10px', // Rounded corners for cards
     boxShadow: '0 4px 15px rgba(0,0,0,0.06)', // Lighter shadow for cards
     textAlign: 'center',
-    transition: 'transform 0.3s ease, box-shadow 0.3s ease', // Smooth transitions
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease', // --- UPDATED: Added background-color transition ---
     border: '1px solid var(--border-color)', // Subtle border
     '&:hover': {
       transform: 'translateY(-8px)', // More pronounced lift on hover
       boxShadow: '0 8px 20px rgba(0,0,0,0.12)', // Stronger shadow on hover
+      backgroundColor: '#EBF6FF', // --- NEW: Subtle blue tint on hover ---
     },
   },
   icon: {
@@ -93,19 +92,19 @@ const benefitsStyles = {
   },
   '@media (max-width: 768px)': {
     heading: {
-      fontSize: '2.2em',
-    },
-    grid: {
-      gridTemplateColumns: '1fr', // Stack cards vertically on smaller screens
-      padding: '0 20px', // Add some horizontal padding
-    },
-  },
-  '@media (max-width: 480px)': {
-    heading: {
-      fontSize: '1.8em',
+      fontSize: '2.5em',
     },
     benefitCard: {
       padding: '25px',
+    },
+    icon: {
+      fontSize: '3em',
+    },
+    cardTitle: {
+      fontSize: '1.4em',
+    },
+    cardDescription: {
+      fontSize: '1em',
     },
   },
 };

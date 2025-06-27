@@ -1,5 +1,6 @@
+// src/components/Footer.jsx
 import React from 'react';
-import { Link } from 'react-router-dom'; // <--- ADD THIS LINE
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -45,7 +46,7 @@ const Footer = () => {
           <h3 style={footerStyles.heading}>Contact</h3>
           <p style={footerStyles.text}>Email: Mirute1307@gmail.com</p>
           <p style={footerStyles.text}>Phone: 07765394030</p>
-          <p style={footerStyles.text}>Address: [Your Company Address Here]</p>
+          <p style={footerStyles.text}>Address: 209A Roxeth Green Avenue, Harrow, London, HA2 0QG, UK</p>
         </div>
       </div>
 
@@ -140,7 +141,7 @@ const footerStyles = {
     color: 'var(--light-bg)',
     display: 'flex',
     gap: '15px',
-    marginBottom: '10px', // Added this from your provided code
+    marginBottom: '10px',
   },
 };
 

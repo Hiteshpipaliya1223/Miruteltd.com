@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'; // --- UPDATED: Import useState and useEffect ---
 
 const HeroSection = () => {
+  const [isVisible, setIsVisible] = useState(false); // State to control animation
+
+  useEffect(() => {
+    // Set isVisible to true after component mounts to trigger animation
+    setIsVisible(true);
+  }, []);
+
   return (
     <section style={heroStyles.container}>
       <div style={heroStyles.contentWrapper}>
-        <div style={heroStyles.promoContent}>
+        {/* --- UPDATED: Apply animation class conditionally --- */}
+        <div style={{
+          ...heroStyles.promoContent,
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+          transition: 'opacity 0.8s ease-out, transform 0.8s ease-out',
+        }}>
           <h2 style={heroStyles.promoTitle}>Welcome to Mirute Ltd.: Where Comfort Meets Confidence</h2>
           <p style={heroStyles.promoDescription}>
             Discover our exquisite collection of seamless push-up bras, meticulously designed to provide unparalleled comfort, a flawless silhouette, and a boost of confidence for every woman. Experience the Mirute Ltd. difference today.
@@ -23,10 +36,9 @@ const HeroSection = () => {
               <p style={heroStyles.promoProductText}>Perfect Lift</p>
             </div>
           </div>
-          <div style={heroStyles.promoPrice}>
-            Bras from <span style={heroStyles.priceHighlight}>£11.99</span>
-          </div>
-          <button style={heroStyles.shopNowButton}>Shop Our Seamless Collection</button>
+          <button style={heroStyles.shopNowButton}>
+            Shop Our Seamless Collection
+          </button>
         </div>
       </div>
     </section>
@@ -35,104 +47,100 @@ const HeroSection = () => {
 
 const heroStyles = {
   container: {
-    backgroundColor: 'var(--light-bg)', // Consistent light background
-    padding: '80px 20px', // More vertical padding for impact
-    margin: '30px 0', // More margin from surrounding elements
-    overflow: 'hidden', // Ensures no overflow issues with animations
+    backgroundColor: 'var(--light-bg)',
+    padding: '60px 20px',
+    textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: 'calc(100vh - 150px)', // Adjust based on header/footer height
+    position: 'relative',
+    overflow: 'hidden',
   },
   contentWrapper: {
+    maxWidth: '1200px',
+    width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    gap: '40px', // Increased gap
-    maxWidth: '1000px', // Slightly wider content area
-    margin: '0 auto',
     alignItems: 'center',
-    textAlign: 'center',
+    justifyContent: 'center',
   },
   promoContent: {
-    flex: '1',
-    width: '100%',
-    backgroundColor: 'var(--white)', // White card background
-    padding: '50px 40px', // More padding inside card
-    borderRadius: '12px', // More rounded corners
-    boxShadow: '0 8px 30px rgba(0,0,0,0.1)', // More pronounced shadow
+    backgroundColor: 'var(--white)',
+    borderRadius: '15px',
+    padding: '40px',
+    boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+    maxWidth: '900px',
+    margin: '0 auto',
+    zIndex: 10,
+    // --- Initial animation state (will be overridden by isVisible) ---
+    opacity: 0,
+    transform: 'translateY(20px)',
+    transition: 'opacity 0.8s ease-out, transform 0.8s ease-out',
   },
   promoTitle: {
-    color: 'var(--secondary-dark)', // Darker text for professionalism
-    fontSize: '3.2em', // Larger, more impactful title
-    marginBottom: '25px',
+    fontSize: '3.5em',
+    color: 'var(--secondary-dark)',
+    marginBottom: '20px',
+    fontWeight: '700',
     lineHeight: '1.2',
-    fontWeight: '700', // Bolder title
   },
   promoDescription: {
-    fontSize: '1.3em', // Larger description
+    fontSize: '1.2em',
     color: 'var(--text-color)',
-    marginBottom: '40px',
-    maxWidth: '800px',
-    margin: '0 auto 40px auto',
+    marginBottom: '30px',
+    maxWidth: '700px',
+    margin: '0 auto 30px auto',
+    lineHeight: '1.6',
   },
   promoProducts: {
     display: 'flex',
     justifyContent: 'center',
-    flexWrap: 'wrap',
-    gap: '40px', // More space between product images
+    gap: '30px',
     marginBottom: '40px',
+    flexWrap: 'wrap',
   },
   promoProductItem: {
     textAlign: 'center',
-    flex: '0 0 auto',
-    maxWidth: '160px', // Larger product image containers
+    transition: 'transform 0.3s ease', // Smooth transition for hover
+    '&:hover': {
+      transform: 'scale(1.05)', // Subtle zoom on hover
+    },
   },
   promoProductImage: {
-    width: '140px', // Larger images
-    height: '140px',
-    objectFit: 'contain',
-    border: '2px solid var(--border-color)', // More prominent border
-    borderRadius: '10px', // More rounded image corners
-    boxShadow: '0 4px 10px rgba(0,0,0,0.08)', // Soft shadow for images
-    transition: 'transform 0.3s ease', // Add transition for hover effect
-    '&:hover': {
-      transform: 'scale(1.08)', // Subtle zoom on hover
-    }
+    width: '150px',
+    height: '150px',
+    borderRadius: '50%',
+    objectFit: 'cover',
+    border: '4px solid var(--primary-blue)',
+    boxShadow: '0 5px 15px rgba(0,0,0,0.1)',
   },
   promoProductText: {
-    fontSize: '1.1em', // Larger text
-    color: 'var(--secondary-dark)',
-    marginTop: '15px', // More space
-    fontWeight: 'bold',
-  },
-  promoPrice: {
-    fontSize: '2.2em', // Larger price text
-    color: 'var(--secondary-dark)',
-    fontWeight: 'bold',
-    marginBottom: '30px',
-  },
-  priceHighlight: {
-    fontSize: '1.2em', // Relative size to parent
-    color: 'var(--primary-blue)', // Use primary blue for highlight
-    fontWeight: '900', // Extra bold for emphasis
-    marginLeft: '10px',
+    fontSize: '1em',
+    color: 'var(--text-color)',
+    marginTop: '10px',
+    fontWeight: '500',
   },
   shopNowButton: {
     backgroundColor: 'var(--primary-blue)',
     color: 'var(--white)',
-    padding: '20px 45px', // Larger button
+    padding: '20px 45px',
     border: 'none',
-    borderRadius: '8px', // More rounded
-    fontSize: '1.3em', // Larger font
-    fontWeight: 'bold', // Bolder text
+    borderRadius: '8px',
+    fontSize: '1.3em',
+    fontWeight: 'bold',
     cursor: 'pointer',
     transition: 'background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease',
-    boxShadow: '0 5px 15px rgba(0, 123, 255, 0.3)', // Shadow for button pop
+    boxShadow: '0 5px 15px rgba(0, 123, 255, 0.3)',
     '&:hover': {
       backgroundColor: '#0056b3', // Darker blue on hover
       transform: 'translateY(-3px)', // More pronounced lift
-      boxShadow: '0 8px 20px rgba(0, 123, 255, 0.4)', // More shadow on hover
+      boxShadow: '0 8px 20px rgba(0, 123, 255, 0.4)',
     }
   },
   '@media (max-width: 768px)': {
     promoTitle: {
-      fontSize: '2.5em', // Adjust for smaller screens
+      fontSize: '2.5em',
     },
     promoDescription: {
       fontSize: '1em',
@@ -152,22 +160,6 @@ const heroStyles = {
       fontSize: '1.1em',
     },
   },
-  '@media (max-width: 480px)': {
-    promoTitle: {
-      fontSize: '2em',
-    },
-    promoContent: {
-      padding: '30px 20px',
-    },
-    promoProducts: {
-      flexDirection: 'column', // Stack products vertically on very small screens
-      alignItems: 'center',
-    },
-    promoProductImage: {
-      width: '120px',
-      height: '120px',
-    },
-  }
 };
 
 export default HeroSection;

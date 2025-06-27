@@ -1,4 +1,4 @@
-/* ProductDisplay.css */
+/* src/components/ProductDisplay.css */
 
 .product-display-container {
     padding: 20px;
@@ -40,35 +40,49 @@
 .product-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
-    gap: 30px; /* Space between blocks */
-    justify-content: center;
-    align-items: stretch;
+    gap: 30px; /* Space between grid items */
 }
 
 .product-block {
-    position: relative;
-    background-color: #f8f8f8;
-    border-radius: 8px;
+    background-color: #fff;
+    border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end; /* Align content to the bottom */
-    padding: 25px; /* Padding inside the block for text */
-    min-height: 280px; /* Crucial: Gives the block a height for background image */
-    background-size: cover; /* Makes the image cover the entire area */
-    background-position: center; /* Centers the image */
-    background-repeat: no-repeat; /* Prevents image repetition */
-    color: white; /* Text color for readability over dark overlay */
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Adds shadow to text for contrast */
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    display: flex; /* Make it a flex container */
+    flex-direction: column; /* Stack content vertically */
+    height: 400px; /* Fixed height for consistency */
+    position: relative;
+    color: white; /* Default text color for overlay */
+    text-align: left;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out, opacity 0.5s ease-out; /* --- UPDATED: Added opacity and transform transition --- */
+    opacity: 0; /* --- NEW: Initial state for fade-in animation --- */
+    transform: translateY(20px); /* --- NEW: Initial state for slide-up animation --- */
 }
 
-/* Overlay content for text */
+/* --- NEW: Class to trigger the animation when visible --- */
+.product-block.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+.product-block:hover {
+    transform: translateY(-8px) scale(1.02); /* --- UPDATED: More pronounced lift and subtle scale --- */
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15); /* --- UPDATED: Stronger shadow on hover --- */
+    cursor: pointer;
+}
+
 .overlay-content {
-    /* Styles to ensure text is readable over the background image */
-    background: rgba(0, 0, 0, 0.4); /* Semi-transparent dark overlay */
-    padding: 15px;
-    border-radius: 0 0 8px 8px; /* Rounded corners only at bottom */
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    padding: 25px;
+    flex-grow: 1; /* Allow content to grow */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Push content to bottom */
+    align-items: flex-start; /* Align text to start */
+    border-radius: 0 0 10px 10px; /* Rounded corners only at bottom */
     width: calc(100% + 50px); /* Adjust width to cover padding */
     margin: -25px -25px -25px -25px; /* Pull into padding area */
     box-sizing: border-box; /* Include padding in width/height */
@@ -90,13 +104,15 @@
 
 .block-link {
     display: inline-block;
-    background-color: #007bff; /* Primary action color */
-    color: white;
+    background-color: var(--primary-blue); /* --- UPDATED: Use CSS variable --- */
+    color: var(--white); /* --- UPDATED: Use CSS variable --- */
     padding: 10px 20px;
     border-radius: 5px;
     text-decoration: none;
     font-weight: 500;
     transition: background-color 0.3s ease;
+    align-self: flex-start; /* Aligns button to the left */
+    margin-top: auto; /* Pushes button to the bottom */
 }
 
 .block-link:hover {
@@ -112,6 +128,10 @@
     .product-grid {
         grid-template-columns: 1fr; /* Single column on smaller screens */
     }
+
+    .product-block-image {
+        height: 180px; /* Adjust image height for smaller screens */
+    }
 }
 
 @media (max-width: 480px) {
@@ -125,14 +145,14 @@
         padding: 8px 12px;
         font-size: 0.9em;
     }
-    .product-block {
-        min-height: 250px;
-        padding: 20px;
-    }
     .block-title {
         font-size: 1.4em;
     }
     .block-description {
+        font-size: 0.9em;
+    }
+    .block-link {
+        padding: 8px 15px;
         font-size: 0.9em;
     }
 }
