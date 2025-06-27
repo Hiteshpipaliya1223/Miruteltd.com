@@ -6,10 +6,9 @@ import { CartProvider } from './context/CartContext';
 import Header from "./components/Header";
 import Navigation from "./components/Navigation";
 import PromotionBanner from "./components/PromotionBanner";
-import HeroSection from "./components/HeroSection";
-import ProductList from "./components/ProductList";
 import Footer from "./components/Footer";
 
+// Import all your pages and components
 import ContactUsPage from "./pages/ContactUsPage";
 import FAQPage from "./pages/FAQPage";
 import BlogPage from "./pages/BlogPage";
@@ -18,9 +17,15 @@ import CartPage from "./pages/CartPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import StitchingAlterationsPage from "./pages/StitchingAlterationsPage";
 
-import ServicesSection from './components/ServicesSection';
+// --- NEW/UPDATED IMPORTS FOR SIMPLIFIED SERVICES ---
 import BabyBedsPage from './pages/BabyBedsPage';
 import TailoringServicesPage from './pages/TailoringServicesPage';
+
+// Import the new HomeContent component that groups homepage sections
+import HomeContent from './pages/HomeContent';
+
+// ProductList is imported here because it's used on other specific routes (/products, /bras)
+import ProductList from "./components/ProductList";
 
 function App() {
   return (
@@ -30,29 +35,34 @@ function App() {
           <Header />
           <Navigation />
           <PromotionBanner />
-          <main>
+
+          <main style={appStyles.mainContent}>
             <Routes>
-              <Route path="/" element={
-                <>
-                  <HeroSection />
-                  {/* Assuming ServicesSection is used on the homepage */}
-                  <ServicesSection />
-                  <ProductList />
-                </>
-              } />
+              {/* CORRECTED: The root path now directly renders the HomeContent component within 'element' prop */}
+              <Route path="/" element={<HomeContent />} />
+
+              {/* Other routes remain the same */}
+              <Route path="/products/:id" element={<ProductDetailPage />} />
+              <Route path="/products" element={<ProductList />} /> {/* Generic products page */}
               <Route path="/contact-us" element={<ContactUsPage />} />
               <Route path="/faq" element={<FAQPage />} />
               <Route path="/blog" element={<BlogPage />} />
-              <Route path="/auth" element={<AuthPages />} />
+              <Route path="/register" element={<AuthPages defaultTab="register" />} />
+              {/* Corrected: AuthPages component was missing its closing curly brace on previous attempt */}
+              <Route path="/sign-in" element={<AuthPages defaultTab="signIn" />} />
               <Route path="/cart" element={<CartPage />} />
-              <Route path="/products/:id" element={<ProductDetailPage />} />
               <Route path="/stitching-alterations" element={<StitchingAlterationsPage />} />
+
+              {/* Specific service pages */}
               <Route path="/bras" element={<ProductList />} />
               <Route path="/baby-beds" element={<BabyBedsPage />} />
               <Route path="/tailoring-services" element={<TailoringServicesPage />} />
+
+              {/* Catch-all for undefined routes */}
               <Route path="*" element={<h1>404: Page Not Found</h1>} />
             </Routes>
           </main>
+
           <Footer />
         </div>
       </Router>
@@ -62,12 +72,23 @@ function App() {
 
 const appStyles = {
   appContainer: {
+    fontFamily: 'Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Open Sans, Helvetica Neue, sans-serif',
+    color: 'var(--text-color)',
     display: 'flex',
     flexDirection: 'column',
     minHeight: '100vh',
-    // --- UPDATED: Subtle background gradient ---
-    background: 'linear-gradient(to bottom, var(--light-bg), #F0F2F5)', // From light-bg to a slightly darker shade
+    margin: 0,
+    padding: 0,
+    boxSizing: 'border-box',
+    backgroundColor: 'var(--light-bg)', // This will be the fallback or base background
+    overflowX: 'hidden',
   },
+  mainContent: {
+    flexGrow: 1,
+    padding: '30px 0',
+    backgroundColor: '#f8f8f8', // Apply subtle light gray to main content area
+  },
+  // productListHeading style is no longer needed here as it's within HomeContent or ProductList now
 };
 
 export default App;
