@@ -17,7 +17,7 @@ const servicesData = [
     buttonText: "Explore Bras →",
     link: "/bras",
     // Corrected path: Directly reference from the public folder
-    imageUrl: "/images/purple_bra_side2.jpg"
+    imageUrl: "/images/purple_bra_side2.png"
   },
   {
     id: 2,
