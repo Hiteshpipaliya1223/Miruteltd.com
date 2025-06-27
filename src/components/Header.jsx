@@ -185,6 +185,129 @@ const headerStyles = {
     textAlign: 'center',
     boxSizing: 'border-box',
   },
+
+  // Media queries for responsiveness
+  '@media (max-width: 1024px)': { // For tablets and smaller desktops
+    mainHeader: {
+      gap: '15px',
+      padding: '15px 15px',
+    },
+    logoImage: {
+      height: '45px',
+    },
+    searchBar: {
+      maxWidth: '400px',
+    },
+    phoneNumber: {
+      fontSize: '1.2em',
+    },
+    cartIcon: {
+      fontSize: '1.6em',
+    },
+  },
+
+  '@media (max-width: 768px)': { // For larger mobile devices and small tablets
+    topBar: {
+      flexDirection: 'column', // Stack items vertically
+      alignItems: 'flex-start', // Align items to the start
+      padding: '10px 15px',
+      gap: '5px',
+    },
+    topBarRight: {
+      justifyContent: 'flex-start', // Align to start when stacked
+      width: '100%', // Take full width
+      gap: '10px',
+    },
+    topBarLeft: {
+        width: '100%',
+        gap: '10px',
+    },
+    mainHeader: {
+      flexDirection: 'column', // Stack main header items vertically
+      padding: '15px',
+      gap: '15px',
+    },
+    logo: {
+      width: '100%', // Logo takes full width
+      textAlign: 'center',
+      order: 1, // Ensure logo is at the top
+    },
+    logoImage: {
+      height: '40px', // Smaller logo for mobile
+    },
+    searchBar: {
+      order: 2, // Search bar below logo
+      width: '100%', // Full width
+      maxWidth: '100%', // Ensure it doesn't exceed parent width
+    },
+    contactInfo: {
+      order: 3, // Contact info below search bar
+      textAlign: 'center',
+      width: '100%', // Full width
+    },
+    cartIcon: {
+      order: 4, // Cart icon below contact info
+      width: '100%', // Full width
+      justifyContent: 'center', // Center cart icon
+      marginLeft: '0', // Remove auto margin when centered
+      fontSize: '1.5em',
+    },
+    callNow: {
+      fontSize: '0.8em',
+    },
+    phoneNumber: {
+      fontSize: '1.2em',
+    },
+    searchInput: {
+        padding: '10px 12px',
+        fontSize: '0.9em',
+    },
+    searchButton: {
+        padding: '10px 15px',
+        fontSize: '1em',
+    },
+  },
+
+  '@media (max-width: 480px)': { // For smaller mobile devices
+    topBar: {
+      padding: '8px 10px',
+      fontSize: '0.75em',
+    },
+    topBarLink: {
+      padding: '5px 8px',
+    },
+    welcomeText: {
+        fontSize: '0.8em',
+    },
+    mainHeader: {
+      padding: '10px',
+      gap: '10px',
+    },
+    logoImage: {
+      height: '35px',
+    },
+    searchInput: {
+      padding: '8px 10px',
+      fontSize: '0.85em',
+    },
+    searchButton: {
+      padding: '8px 12px',
+      fontSize: '0.9em',
+    },
+    phoneNumber: {
+      fontSize: '1em',
+    },
+    cartIcon: {
+      fontSize: '1.3em',
+    },
+    cartCount: {
+      padding: '2px 6px',
+      fontSize: '0.6em',
+      minWidth: '18px',
+      top: '-6px',
+      right: '-6px',
+    },
+  },
 };
 
 export default Header;

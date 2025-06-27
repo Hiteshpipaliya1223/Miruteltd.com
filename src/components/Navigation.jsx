@@ -56,13 +56,25 @@ const navStyles = {
       overflowX: 'auto', // Allow horizontal scrolling if necessary
       paddingBottom: '5px',
       '-webkit-overflow-scrolling': 'touch', /* for smooth scrolling on iOS */
-      scrollbarWidth: 'none',  /* Firefox */
+      scrollbarWidth: 'none',   /* Firefox */
       msOverflowStyle: 'none',   /* IE and Edge */
     },
     'navList::-webkit-scrollbar': { /* Chrome, Safari, Opera */
       display: 'none',
     },
-  }
+    navLink: {
+        fontSize: '1em', // Slightly smaller font for mobile
+        padding: '5px 0',
+    },
+  },
+  '@media (max-width: 480px)': { // For very small mobile devices
+    navList: {
+      gap: '15px', // Further reduce gap
+    },
+    navLink: {
+        fontSize: '0.9em', // Even smaller font
+    },
+  },
 };
 
 export default Navigation;
