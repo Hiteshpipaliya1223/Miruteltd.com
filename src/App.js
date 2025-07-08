@@ -9,25 +9,43 @@ import PromotionBanner from "./components/PromotionBanner";
 import Footer from "./components/Footer";
 
 // Import all your pages and components
+// Removed the problematic 'HomePage' import as it was causing a Module not found error
+// import HomePage from "./pages/HomePage"; // This line is now removed or commented out
+
+import AboutUsPage from "./pages/AboutUsPage";
 import ContactUsPage from "./pages/ContactUsPage";
 import FAQPage from "./pages/FAQPage";
 import BlogPage from "./pages/BlogPage";
 import AuthPages from "./pages/AuthPages";
 import CartPage from "./pages/CartPage";
+import ProductList from "./components/ProductList"; // Your product listing component
 import ProductDetailPage from "./pages/ProductDetailPage";
 import StitchingAlterationsPage from "./pages/StitchingAlterationsPage";
+import CheckoutPage from "./pages/CheckoutPage"; // Your new CheckoutPage
 
 // --- NEW/UPDATED IMPORTS FOR SIMPLIFIED SERVICES ---
 import BabyBedsPage from './pages/BabyBedsPage';
 import TailoringServicesPage from './pages/TailoringServicesPage';
 
-// Import the new HomeContent component that groups homepage sections
+// Import the new HomeContent component that groups homepage sections (if you use it)
 import HomeContent from './pages/HomeContent';
 
-// ProductList is imported here because it's used on other specific routes (/products, /bras)
-import ProductList from "./components/ProductList";
+import './index.css'; // Your global styles
 
 function App() {
+  // Basic styling for the main content area to provide some spacing
+  // This style object is used directly on the <main> tag below
+  const mainContentStyles = {
+    flexGrow: 1, // Allows content to grow and push footer down
+    padding: '30px 0', // Add some padding top/bottom
+    backgroundColor: '#f8f8f8', // Subtle light gray background to fill empty space
+    minHeight: 'calc(100vh - var(--header-height, 80px) - var(--footer-height, 200px))', // Adjust heights as needed
+    display: 'flex', // Use flex to center content
+    flexDirection: 'column',
+    alignItems: 'center', // Center horizontally
+    justifyContent: 'flex-start', // Align to start vertically
+  };
+
   return (
     <CartProvider>
       <Router>
@@ -36,27 +54,33 @@ function App() {
           <Navigation />
           <PromotionBanner />
 
-          <main style={appStyles.mainContent}>
+          <main style={mainContentStyles}> {/* IMPORTANT: Applying mainContentStyles directly here */}
             <Routes>
-              {/* CORRECTED: The root path now directly renders the HomeContent component within 'element' prop */}
+              {/* The root path now directly renders the HomeContent component */}
               <Route path="/" element={<HomeContent />} />
 
-              {/* Other routes remain the same */}
+              {/* Add the /shop route here to point to your ProductList component */}
+              <Route path="/shop" element={<ProductList />} />
+
+              {/* Other routes */}
               <Route path="/products/:id" element={<ProductDetailPage />} />
               <Route path="/products" element={<ProductList />} /> {/* Generic products page */}
               <Route path="/contact-us" element={<ContactUsPage />} />
               <Route path="/faq" element={<FAQPage />} />
               <Route path="/blog" element={<BlogPage />} />
               <Route path="/register" element={<AuthPages defaultTab="register" />} />
-              {/* Corrected: AuthPages component was missing its closing curly brace on previous attempt */}
               <Route path="/sign-in" element={<AuthPages defaultTab="signIn" />} />
               <Route path="/cart" element={<CartPage />} />
+              <Route path="/checkout" element={<CheckoutPage />} /> {/* The Checkout Page route */}
               <Route path="/stitching-alterations" element={<StitchingAlterationsPage />} />
 
               {/* Specific service pages */}
-              <Route path="/bras" element={<ProductList />} />
+              <Route path="/bras" element={<ProductList />} /> {/* Example category route */}
               <Route path="/baby-beds" element={<BabyBedsPage />} />
               <Route path="/tailoring-services" element={<TailoringServicesPage />} />
+
+              {/* About Us Page - Correctly placed before catch-all */}
+              <Route path="/about-us" element={<AboutUsPage />} />
 
               {/* Catch-all for undefined routes */}
               <Route path="*" element={<h1>404: Page Not Found</h1>} />
@@ -80,15 +104,11 @@ const appStyles = {
     margin: 0,
     padding: 0,
     boxSizing: 'border-box',
-    backgroundColor: 'var(--light-bg)', // This will be the fallback or base background
+    backgroundColor: 'var(--light-bg)',
     overflowX: 'hidden',
   },
-  mainContent: {
-    flexGrow: 1,
-    padding: '30px 0',
-    backgroundColor: '#f8f8f8', // Apply subtle light gray to main content area
-  },
-  // productListHeading style is no longer needed here as it's within HomeContent or ProductList now
+  // Removed 'mainContent' property from appStyles, as mainContentStyles is used directly.
+  // This fixes the ESLint warning: 'mainContentStyles' is assigned a value but never used
 };
 
 export default App;

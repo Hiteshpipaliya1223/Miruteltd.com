@@ -44,7 +44,7 @@ const StarRating = ({ initialRating = 0, onRatingChange, readOnly = false }) => 
       })}
       {/* Optionally display the selected rating */}
       {!readOnly && rating > 0 && <span style={starRatingStyles.currentRatingText}>({rating}/5)</span>}
-      {readOnly && initialRating > 0 && <span style={starRatingStyles.currentRatingText}>({initialRating.toFixed(1)}/5)</span>} {/* Added toFixed(1) for consistent display */}
+      {readOnly && initialRating > 0 && <span style={starRatingStyles.currentRatingText}>({initialRating.toFixed(1)}/5)</span>}
     </div>
   );
 };

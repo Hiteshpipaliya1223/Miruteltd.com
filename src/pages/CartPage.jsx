@@ -1,6 +1,6 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'; // Ensure Link is imported
 
 const CartPage = () => {
   const { cartItems, addToCart, decreaseQuantity, removeFromCart, getCartTotal } = useCart();
@@ -12,7 +12,7 @@ const CartPage = () => {
       {cartItems.length === 0 ? (
         <div style={cartPageStyles.emptyCart}>
           <p>Your cart is empty.</p>
-          <Link to="/products" style={cartPageStyles.shopNowButton}>
+          <Link to="/shop" style={cartPageStyles.shopNowButton}> {/* Changed to /shop for product list */}
             Start Shopping
           </Link>
         </div>
@@ -26,22 +26,22 @@ const CartPage = () => {
                   <h3 style={cartPageStyles.itemName}>{item.name}</h3>
                   <p style={cartPageStyles.itemPrice}>£{(item.price * item.quantity).toFixed(2)}</p>
                   <div style={cartPageStyles.quantityControl}>
-                    <button 
-                      style={cartPageStyles.quantityButton} 
+                    <button
+                      style={cartPageStyles.quantityButton}
                       onClick={() => decreaseQuantity(item.id)}
                     >
                       -
                     </button>
                     <span style={cartPageStyles.itemQuantity}>{item.quantity}</span>
-                    <button 
-                      style={cartPageStyles.quantityButton} 
+                    <button
+                      style={cartPageStyles.quantityButton}
                       onClick={() => addToCart(item)}
                     >
                       +
                     </button>
                   </div>
-                  <button 
-                    style={cartPageStyles.removeButton} 
+                  <button
+                    style={cartPageStyles.removeButton}
                     onClick={() => removeFromCart(item.id)}
                   >
                     Remove
@@ -54,7 +54,10 @@ const CartPage = () => {
           <div style={cartPageStyles.cartSummary}>
             <h3 style={cartPageStyles.summaryHeading}>Cart Summary</h3>
             <p style={cartPageStyles.totalText}>Total ({cartItems.reduce((acc, item) => acc + item.quantity, 0)} items): <span style={cartPageStyles.totalAmount}>£{getCartTotal()}</span></p>
-            <button style={cartPageStyles.checkoutButton}>Proceed to Checkout</button>
+            {/* CORRECTED: Use Link to navigate to checkout */}
+            <Link to="/checkout" style={cartPageStyles.checkoutButton}>
+              Proceed to Checkout
+            </Link>
           </div>
         </>
       )}

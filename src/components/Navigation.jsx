@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; // Make sure this import is present
 
+
 const Navigation = () => {
   return (
     <nav style={navStyles.container}>
@@ -77,4 +78,5 @@ const navStyles = {
   },
 };
 
+<li style={navStyles.navItem}><Link to="/about-us" style={navStyles.navLink}>ABOUT US</Link></li>
 export default Navigation;
