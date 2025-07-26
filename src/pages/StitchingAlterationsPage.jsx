@@ -1,76 +1,67 @@
 // src/pages/StitchingAlterationsPage.jsx
 import React from 'react';
-import TimeSlotBooking from '../components/TimeSlotBooking'; // <-- This import must be correct
+import { Typography, Container, Box, useTheme } from '@mui/material';
+import TimeSlotBooking from '../components/TimeSlotBooking';
 
 const StitchingAlterationsPage = () => {
+  const theme = useTheme();
+
   return (
-    // The outermost div needs to be the single parent.
-    // Ensure you use the styles defined within this component or remove them if not needed.
-    <div style={pageStyles.container}> {/* Using a local style object */}
-      <h1 style={pageStyles.heading}>Stitching & Alterations Service</h1> {/* This was the 'h1' line from your previous code in the image */}
-      <p style={pageStyles.paragraph}>
+    <Container maxWidth="lg" sx={{ py: { xs: 4, md: 8 }, textAlign: 'center' }}>
+      <Typography
+        variant="h2"
+        component="h1"
+        sx={{
+          mb: { xs: 2, md: 3 },
+          color: theme.palette.primary.dark,
+          fontWeight: 700,
+          fontSize: { xs: '2.5rem', sm: '3rem', md: '3.5rem' },
+        }}
+      >
+        Stitching & Alterations Service
+      </Typography>
+
+      <Typography
+        variant="body1"
+        color={theme.palette.text.primary}
+        sx={{ mb: { xs: 4, md: 6 }, maxWidth: 800, mx: 'auto' }}
+      >
         Welcome to our premium stitching and alterations service. Whether you need a custom-made garment, a perfect fit for your existing clothes, or intricate repairs, our skilled tailors are here to bring your vision to life.
-      </p>
-      <p style={pageStyles.paragraph}>
+      </Typography>
+      <Typography
+        variant="body1"
+        color={theme.palette.text.primary}
+        sx={{ mb: { xs: 6, md: 8 }, maxWidth: 800, mx: 'auto' }}
+      >
         Book your preferred time slot below for a consultation or service appointment. We look forward to providing you with impeccable craftsmanship!
-      </p>
+      </Typography>
 
-      {/* Your Time Slot Booking component goes here */}
-      <TimeSlotBooking /> {/* <-- THIS LINE IS CRUCIAL AND MUST BE PRESENT! */}
+      <TimeSlotBooking serviceType="Stitching & Alterations" />
 
-      <div style={pageStyles.servicesSection}>
-        <h2 style={pageStyles.servicesHeading}>Our Services Include:</h2>
-        <ul style={pageStyles.servicesList}>
-          <li style={pageStyles.servicesListItem}>Custom Dressmaking</li>
-          <li style={pageStyles.servicesListItem}>Bridal & Formal Wear Alterations</li>
-          <li style={pageStyles.servicesListItem}>Jeans & Trouser Hemming</li>
-          <li style={pageStyles.servicesListItem}>Jacket & Coat Alterations</li>
-          <li style={pageStyles.servicesListItem}>Button & Zipper Repair</li>
-          <li style={pageStyles.servicesListItem}>General Clothing Repair</li>
-        </ul>
-      </div>
-    </div>
+      <Box sx={{ mt: { xs: 8, md: 10 }, borderTop: 1, borderColor: theme.palette.divider, pt: { xs: 4, md: 5 } }}>
+        <Typography variant="h4" component="h2" sx={{ mb: 3, color: theme.palette.primary.dark }}>
+          Our Services Include:
+        </Typography>
+        <Box
+          component="ul"
+          sx={{
+            listStyleType: 'disc',
+            listStylePosition: 'inside',
+            paddingLeft: 0,
+            display: 'inline-block',
+            textAlign: 'left',
+          }}
+        >
+          <Typography component="li" variant="body1" sx={{ mb: 1, color: theme.palette.text.primary }}>Custom Dressmaking</Typography>
+          <Typography component="li" variant="body1" sx={{ mb: 1, color: theme.palette.text.primary }}>Bridal & Formal Wear Alterations</Typography>
+          <Typography component="li" variant="body1" sx={{ mb: 1, color: theme.palette.text.primary }}>Jeans & Trouser Hemming</Typography>
+          <Typography component="li" variant="body1" sx={{ mb: 1, color: theme.palette.text.primary }}>Jacket & Coat Alterations</Typography>
+          <Typography component="li" variant="body1" sx={{ mb: 1, color: theme.palette.text.primary }}>Button & Zipper Repair</Typography>
+          <Typography component="li" variant="body1" sx={{ mb: 1, color: theme.palette.text.primary }}>General Clothing Repair</Typography>
+        </Box>
+      </Box>
+    </Container>
   );
-};
-
-// Define styles locally for this component
-const pageStyles = {
-    container: {
-        padding: '20px',
-        maxWidth: '960px',
-        margin: '40px auto',
-        backgroundColor: 'var(--light-bg)', // Assuming var(--light-bg) is defined in your CSS
-        borderRadius: '8px',
-        boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-    },
-    heading: {
-        textAlign: 'center',
-        color: 'var(--primary-dark)', // Assuming var(--primary-dark) is defined
-        marginBottom: '30px',
-    },
-    paragraph: {
-        fontSize: '1.1em',
-        lineHeight: '1.6',
-        color: 'var(--text-color)', // Assuming var(--text-color) is defined
-        marginBottom: '20px',
-    },
-    servicesSection: {
-        borderTop: '1px solid var(--border-color)', // Assuming var(--border-color) is defined
-        paddingTop: '30px',
-        marginTop: '40px',
-    },
-    servicesHeading: {
-        color: 'var(--primary-dark)',
-        marginBottom: '15px',
-    },
-    servicesList: {
-        listStyleType: 'disc',
-        paddingLeft: '25px',
-        color: 'var(--text-color)',
-    },
-    servicesListItem: {
-        marginBottom: '10px',
-    }
 };
 
 export default StitchingAlterationsPage;
