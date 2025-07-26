@@ -1,313 +1,325 @@
 // src/components/Header.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useCart } from '../context/CartContext'; // Import the useCart hook
-import MiruteLogo from '../assets/your-logo.svg'; // <--- NEW: Import your SVG logo file here.
-                                                 //      Adjust the path if your SVG is in a different folder.
+import { useCart } from '../context/CartContext';
+import MiruteLogo from '../assets/your-logo.svg';
+
+// Material-UI Imports
+import {
+  AppBar, Toolbar, Typography, Button, IconButton, Badge,
+  Box, Container, InputBase, Drawer, List, ListItem, ListItemText,
+  useMediaQuery, useTheme, Menu, MenuItem,
+  Divider
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import PhoneIcon from '@mui/icons-material/Phone';
+import SearchIcon from '@mui/icons-material/Search';
+import CloseIcon from '@mui/icons-material/Close';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import LocalMallIcon from '@mui/icons-material/LocalMall';
+import BabyBedIcon from '@mui/icons-material/KingBed';
+import DesignServicesIcon from '@mui/icons-material/DesignServices';
+
+import './Header.css';
 
 const Header = () => {
-  const { getTotalItems } = useCart();
-  const cartItemCount = getTotalItems();
+  const { getCartItemCount } = useCart();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [anchorElShop, setAnchorElShop] = useState(null);
+  const [anchorElServices, setAnchorElServices] = useState(null);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const handleShopMenuOpen = (event) => {
+    setAnchorElShop(event.currentTarget);
+  };
+
+  const handleShopMenuClose = () => {
+    setAnchorElShop(null);
+  };
+
+  const handleServicesMenuOpen = (event) => {
+    setAnchorElServices(event.currentTarget);
+  };
+
+  const handleServicesMenuClose = () => {
+    setAnchorElServices(null);
+  };
+
+  const menuItems = [
+    { name: 'Home', path: '/' },
+    { name: 'About Us', path: '/about-us' },
+    { name: 'Contact Us', path: '/contact-us' },
+    { name: 'FAQ', path: '/faq' },
+    { name: 'Blog', path: '/blog' },
+  ];
+
+  const shopDropdownItems = [
+    { name: 'All Products', path: '/shop' },
+    { name: 'New Arrivals', path: '/shop?category=new-arrivals' },
+    { name: 'Best Sellers', path: '/shop?category=best-sellers' },
+  ];
+
+  const servicesDropdownItems = [
+    { name: 'Stitching & Alterations', path: '/stitching-alterations' },
+    { name: 'Baby Beds', path: '/baby-beds' },
+    { name: 'Tailoring Services', path: '/tailoring-services' },
+  ];
+
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2 }}>
+        <Typography variant="h6" sx={{ my: 1, color: 'primary.main' }}>
+          Mirute Ltd.
+        </Typography>
+        <IconButton onClick={handleDrawerToggle}>
+          <CloseIcon />
+        </IconButton>
+      </Box>
+      <Divider />
+      <List>
+        {menuItems.map((item) => (
+          <ListItem component={Link} to={item.path} key={item.name} onClick={handleDrawerToggle} disablePadding>
+            <ListItemText primary={item.name} sx={{ textAlign: 'center' }} />
+          </ListItem>
+        ))}
+        {/* Shop Dropdown in Mobile */}
+        <ListItem button onClick={handleShopMenuOpen}>
+            <ListItemText primary="Shop" sx={{ textAlign: 'center' }} />
+            <ExpandMoreIcon />
+        </ListItem>
+        <Menu
+            anchorEl={anchorElShop}
+            open={Boolean(anchorElShop)}
+            onClose={handleShopMenuClose}
+            MenuListProps={{
+                'aria-labelledby': 'shop-button',
+            }}
+        >
+            {shopDropdownItems.map((item) => (
+                <MenuItem
+                    key={item.name}
+                    onClick={() => { handleShopMenuClose(); handleDrawerToggle(); }}
+                    component={Link}
+                    to={item.path}
+                >
+                    <ListItemText primary={item.name} />
+                </MenuItem>
+            ))}
+        </Menu>
+        {/* Services Dropdown in Mobile */}
+        <ListItem button onClick={handleServicesMenuOpen}>
+            <ListItemText primary="Services" sx={{ textAlign: 'center' }} />
+            <ExpandMoreIcon />
+        </ListItem>
+        <Menu
+            anchorEl={anchorElServices}
+            open={Boolean(anchorElServices)}
+            onClose={handleServicesMenuClose}
+            MenuListProps={{
+                'aria-labelledby': 'services-button',
+            }}
+        >
+            {servicesDropdownItems.map((item) => (
+                <MenuItem
+                    key={item.name}
+                    onClick={() => { handleServicesMenuClose(); handleDrawerToggle(); }}
+                    component={Link}
+                    to={item.path}
+                >
+                    <ListItemText primary={item.name} />
+                </MenuItem>
+            ))}
+        </Menu>
+
+        <Divider sx={{ my: 1 }} />
+        <ListItem component={Link} to="/register" onClick={handleDrawerToggle} disablePadding>
+          <ListItemText primary="Register" sx={{ textAlign: 'center' }} />
+        </ListItem>
+        <ListItem component={Link} to="/sign-in" onClick={handleDrawerToggle} disablePadding>
+          <ListItemText primary="Sign In" sx={{ textAlign: 'center' }} />
+        </ListItem>
+        <ListItem component={Link} to="/cart" onClick={handleDrawerToggle} disablePadding>
+          <ListItemText primary={`Cart (${getCartItemCount()})`} sx={{ textAlign: 'center' }} />
+        </ListItem>
+      </List>
+    </Box>
+  );
 
   return (
-    <header style={headerStyles.container}>
-      <div style={headerStyles.topBar}>
-        <div style={headerStyles.topBarLeft}>
-          <button style={headerStyles.topBarLink}>GB <span style={{ fontSize: '0.8em' }}>▼</span></button>
-          <button style={headerStyles.topBarLink}>COMPARE (0)</button>
-        </div>
-        <div style={headerStyles.topBarRight}>
-          <span style={headerStyles.welcomeText}>WELCOME TO MIRUTE LTD.</span>
-          <a href="mailto:Mirute1307@gmail.com" style={headerStyles.topBarLink}>CONTACT US</a>
-          <Link to="/faq" style={headerStyles.topBarLink}>FAQ</Link>
-          <Link to="/blog" style={headerStyles.topBarLink}>BLOG</Link>
-          {/* <--- FIX: Changed the 'to' prop to match the correct route */}
-          <Link to="/stitching-alterations" style={headerStyles.topBarLink}>STITCHING & ALTERATIONS</Link>
-          <Link to="/register" style={headerStyles.topBarLink}>REGISTER</Link>
-          <Link to="/sign-in" style={headerStyles.topBarLink}>SIGN IN</Link>
-          <Link to="/register" style={headerStyles.topBarLink}>CREATE AN ACCOUNT</Link>
-        </div>
-      </div>
+    <AppBar position="static" elevation={0} sx={{ bgcolor: 'white', borderBottom: '1px solid #e0e0e0' }}>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters sx={{ minHeight: '64px !important' }}>
+          {/* Mobile Menu Icon */}
+          {isMobile && (
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { md: 'none' }, color: 'text.primary' }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
 
-      <div style={headerStyles.mainHeader}>
-        <div style={headerStyles.logo}>
-          <Link to="/">
-            {/* <--- UPDATED: Using the imported SVG logo */}
-            <img src={MiruteLogo} alt="Mirute Ltd. Logo" style={headerStyles.logoImage} />
-          </Link>
-        </div>
-        <div style={headerStyles.searchBar}>
-          <input type="text" placeholder="Search products..." style={headerStyles.searchInput} />
-          <button style={headerStyles.searchButton}>🔍</button>
-        </div>
-        <div style={headerStyles.contactInfo}>
-          <span style={headerStyles.callNow}>CALL US NOW</span>
-          <span style={headerStyles.phoneNumber}>07765394030</span>
-        </div>
-        <div style={headerStyles.cartIcon}>
-          <Link to="/cart" style={{ ...headerStyles.cartText, textDecoration: 'none', color: 'inherit' }}>🛒</Link>
-          <span style={headerStyles.cartCount}>{cartItemCount}</span>
-        </div>
-      </div>
-    </header>
+          {/* Logo */}
+          <Typography
+            variant="h6"
+            noWrap
+            component={Link}
+            to="/"
+            sx={{
+              flexGrow: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: { xs: 'center', md: 'flex-start' },
+              textDecoration: 'none',
+              color: 'inherit',
+            }}
+          >
+            <img src={MiruteLogo} alt="Mirute Ltd. Logo" style={{ height: '40px', marginRight: '8px' }} />
+            {!isMobile && (
+                <span className="logo-text">Mirute Ltd.</span>
+            )}
+          </Typography>
+
+          {/* Desktop Navigation */}
+          {!isMobile && (
+            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
+              {menuItems.map((item) => (
+                <Button key={item.name} component={Link} to={item.path} sx={{ color: 'text.primary', mx: 1 }}>
+                  {item.name}
+                </Button>
+              ))}
+              {/* Shop Dropdown */}
+              <Button
+                id="shop-button"
+                aria-controls={anchorElShop ? 'shop-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={anchorElShop ? 'true' : undefined}
+                onClick={handleShopMenuOpen}
+                sx={{ color: 'text.primary', mx: 1 }}
+                endIcon={<ExpandMoreIcon />}
+              >
+                Shop
+              </Button>
+              <Menu
+                id="shop-menu"
+                anchorEl={anchorElShop}
+                open={Boolean(anchorElShop)}
+                onClose={handleShopMenuClose}
+                MenuListProps={{
+                  'aria-labelledby': 'shop-button',
+                }}
+              >
+                {shopDropdownItems.map((item) => (
+                  <MenuItem key={item.name} onClick={handleShopMenuClose} component={Link} to={item.path}>
+                    <LocalMallIcon fontSize="small" sx={{ mr: 1 }} /> {item.name}
+                  </MenuItem>
+                ))}
+              </Menu>
+
+              {/* Services Dropdown */}
+              <Button
+                id="services-button"
+                aria-controls={anchorElServices ? 'services-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={anchorElServices ? 'true' : undefined}
+                onClick={handleServicesMenuOpen}
+                sx={{ color: 'text.primary', mx: 1 }}
+                endIcon={<ExpandMoreIcon />}
+              >
+                Services
+              </Button>
+              <Menu
+                id="services-menu"
+                anchorEl={anchorElServices}
+                open={Boolean(anchorElServices)}
+                onClose={handleServicesMenuClose}
+                MenuListProps={{
+                  'aria-labelledby': 'services-button',
+                }}
+              >
+                {servicesDropdownItems.map((item) => (
+                  <MenuItem key={item.name} onClick={handleServicesMenuClose} component={Link} to={item.path}>
+                    {item.name === 'Baby Beds' && <BabyBedIcon fontSize="small" sx={{ mr: 1 }} />}
+                    {item.name === 'Tailoring Services' && <DesignServicesIcon fontSize="small" sx={{ mr: 1 }} />}
+                    {item.name === 'Stitching & Alterations' && <DesignServicesIcon fontSize="small" sx={{ mr: 1 }} />}
+                    {item.name}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          )}
+
+          {/* Search and Icons */}
+          <Box sx={{ display: 'flex', alignItems: 'center', ml: { xs: 0, md: 2 } }}>
+            {/* Search Input (Desktop only for now) */}
+            {!isMobile && (
+              <Box sx={{ position: 'relative', borderRadius: theme.shape.borderRadius, bgcolor: 'action.hover', '&:hover': { bgcolor: 'action.selected' }, mr: 2, display: 'flex', alignItems: 'center' }}>
+                <SearchIcon sx={{ color: 'text.secondary', ml: 1 }} />
+                <InputBase
+                  placeholder="Search products..."
+                  inputProps={{ 'aria-label': 'search' }}
+                  sx={{ color: 'inherit', '& .MuiInputBase-input': { p: 1, width: '15ch', transition: 'width 0.3s', '&:focus': { width: '25ch' }}}}
+                />
+              </Box>
+            )}
+
+            {/* Phone Number (Desktop only) */}
+            {!isMobile && (
+              <Box sx={{ display: 'flex', alignItems: 'center', color: 'text.secondary', mr: 2 }}>
+                <PhoneIcon sx={{ mr: 0.5 }} />
+                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                  07765394030
+                </Typography>
+              </Box>
+            )}
+
+            {/* Account Icon */}
+            <IconButton component={Link} to="/sign-in" color="inherit" sx={{ color: 'text.secondary' }}>
+              <AccountCircle />
+              {!isMobile && <Typography variant="body2" sx={{ ml: 0.5 }}>Account</Typography>}
+            </IconButton>
+
+            {/* Cart Icon */}
+            <IconButton component={Link} to="/cart" color="inherit" sx={{ color: 'text.secondary' }}>
+              <Badge badgeContent={getCartItemCount()} color="error">
+                <ShoppingCartIcon />
+              </Badge>
+              {!isMobile && <Typography variant="body2" sx={{ ml: 0.5 }}>Cart</Typography>}
+            </IconButton>
+          </Box>
+        </Toolbar>
+      </Container>
+
+      {/* Mobile Drawer */}
+      <nav>
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true,
+          }}
+          sx={{
+            display: { xs: 'block', md: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
+          }}
+        >
+          {drawer}
+        </Drawer>
+      </nav>
+    </AppBar>
   );
-};
-
-const headerStyles = {
-  container: {
-    backgroundColor: 'var(--white)',
-    borderBottom: '1px solid var(--border-color)',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-  },
-  topBar: {
-    backgroundColor: 'var(--light-bg)',
-    padding: '8px 20px',
-    fontSize: '0.85em',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderBottom: '1px solid var(--border-color)',
-    flexWrap: 'wrap',
-    gap: '10px',
-  },
-  topBarLeft: {
-    display: 'flex',
-    gap: '20px',
-    flexWrap: 'wrap',
-  },
-  topBarRight: {
-    display: 'flex',
-    gap: '20px',
-    flexWrap: 'wrap',
-    justifyContent: 'flex-end',
-    flexGrow: 1,
-  },
-  topBarLink: {
-    background: 'none',
-    border: 'none',
-    padding: 0,
-    margin: 0,
-    cursor: 'pointer',
-    font: 'inherit',
-    textDecoration: 'none',
-    color: 'var(--secondary-dark)',
-    fontWeight: 'normal',
-    whiteSpace: 'nowrap',
-    transition: 'color 0.3s ease',
-  },
-  welcomeText: {
-    color: 'var(--secondary-dark)',
-    fontWeight: 'bold',
-    whiteSpace: 'nowrap',
-  },
-  mainHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: '20px 20px',
-    maxWidth: '1200px',
-    margin: '0 auto',
-    flexWrap: 'wrap',
-    gap: '20px',
-  },
-  logo: {
-    flexShrink: 0,
-  },
-  logoImage: {
-    height: '50px', // Adjust as needed
-    width: 'auto',
-  },
-  searchBar: {
-    display: 'flex',
-    flexGrow: 1,
-    maxWidth: '550px',
-    order: 3, // Maintain order for responsiveness
-    width: '100%', // Ensure it takes full width on small screens
-  },
-  searchInput: {
-    flexGrow: 1,
-    padding: '12px 15px',
-    border: '1px solid var(--border-color)',
-    borderRadius: '5px 0 0 5px',
-    fontSize: '1em',
-    outline: 'none',
-  },
-  searchButton: {
-    backgroundColor: 'var(--primary-blue)',
-    color: 'var(--white)',
-    border: '1px solid var(--primary-blue)',
-    padding: '12px 18px',
-    borderRadius: '0 5px 5px 0',
-    cursor: 'pointer',
-    fontSize: '1.1em',
-  },
-  contactInfo: {
-    textAlign: 'right',
-    order: 2, // Maintain order for responsiveness
-    whiteSpace: 'nowrap',
-  },
-  callNow: {
-    display: 'block',
-    fontSize: '0.85em',
-    color: 'var(--text-color)',
-  },
-  phoneNumber: {
-    display: 'block',
-    fontSize: '1.4em',
-    fontWeight: 'bold',
-    color: 'var(--secondary-dark)',
-  },
-  cartIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    fontSize: '1.8em',
-    color: 'var(--secondary-dark)',
-    position: 'relative',
-    order: 4, // Maintain order for responsiveness
-    marginLeft: 'auto', // Pushes it to the right
-    cursor: 'pointer',
-  },
-  cartText: {
-    marginRight: '5px',
-    fontSize: '1.1em',
-  },
-  cartCount: {
-    position: 'absolute',
-    top: '-8px',
-    right: '-8px',
-    backgroundColor: 'var(--accent-pink)',
-    color: 'var(--white)',
-    borderRadius: '50%',
-    padding: '3px 8px',
-    fontSize: '0.7em',
-    fontWeight: 'bold',
-    minWidth: '22px',
-    textAlign: 'center',
-    boxSizing: 'border-box',
-  },
-
-  // Media queries for responsiveness
-  '@media (max-width: 1024px)': { // For tablets and smaller desktops
-    mainHeader: {
-      gap: '15px',
-      padding: '15px 15px',
-    },
-    logoImage: {
-      height: '45px',
-    },
-    searchBar: {
-      maxWidth: '400px',
-    },
-    phoneNumber: {
-      fontSize: '1.2em',
-    },
-    cartIcon: {
-      fontSize: '1.6em',
-    },
-  },
-
-  '@media (max-width: 768px)': { // For larger mobile devices and small tablets
-    topBar: {
-      flexDirection: 'column', // Stack items vertically
-      alignItems: 'flex-start', // Align items to the start
-      padding: '10px 15px',
-      gap: '5px',
-    },
-    topBarRight: {
-      justifyContent: 'flex-start', // Align to start when stacked
-      width: '100%', // Take full width
-      gap: '10px',
-    },
-    topBarLeft: {
-        width: '100%',
-        gap: '10px',
-    },
-    mainHeader: {
-      flexDirection: 'column', // Stack main header items vertically
-      padding: '15px',
-      gap: '15px',
-    },
-    logo: {
-      width: '100%', // Logo takes full width
-      textAlign: 'center',
-      order: 1, // Ensure logo is at the top
-    },
-    logoImage: {
-      height: '40px', // Smaller logo for mobile
-    },
-    searchBar: {
-      order: 2, // Search bar below logo
-      width: '100%', // Full width
-      maxWidth: '100%', // Ensure it doesn't exceed parent width
-    },
-    contactInfo: {
-      order: 3, // Contact info below search bar
-      textAlign: 'center',
-      width: '100%', // Full width
-    },
-    cartIcon: {
-      order: 4, // Cart icon below contact info
-      width: '100%', // Full width
-      justifyContent: 'center', // Center cart icon
-      marginLeft: '0', // Remove auto margin when centered
-      fontSize: '1.5em',
-    },
-    callNow: {
-      fontSize: '0.8em',
-    },
-    phoneNumber: {
-      fontSize: '1.2em',
-    },
-    searchInput: {
-        padding: '10px 12px',
-        fontSize: '0.9em',
-    },
-    searchButton: {
-        padding: '10px 15px',
-        fontSize: '1em',
-    },
-  },
-
-  '@media (max-width: 480px)': { // For smaller mobile devices
-    topBar: {
-      padding: '8px 10px',
-      fontSize: '0.75em',
-    },
-    topBarLink: {
-      padding: '5px 8px',
-    },
-    welcomeText: {
-        fontSize: '0.8em',
-    },
-    mainHeader: {
-      padding: '10px',
-      gap: '10px',
-    },
-    logoImage: {
-      height: '35px',
-    },
-    searchInput: {
-      padding: '8px 10px',
-      fontSize: '0.85em',
-    },
-    searchButton: {
-      padding: '8px 12px',
-      fontSize: '0.9em',
-    },
-    phoneNumber: {
-      fontSize: '1em',
-    },
-    cartIcon: {
-      fontSize: '1.3em',
-    },
-    cartCount: {
-      padding: '2px 6px',
-      fontSize: '0.6em',
-      minWidth: '18px',
-      top: '-6px',
-      right: '-6px',
-    },
-  },
 };
 
 export default Header;

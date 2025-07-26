@@ -1,77 +1,93 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+// src/context/CartContext.js
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// 1. Create the Context
 const CartContext = createContext();
 
-// 2. Create a Provider Component
+export const useCart = () => useContext(CartContext);
+
 export const CartProvider = ({ children }) => {
-  // Initialize cart state from localStorage if available, otherwise empty array
   const [cartItems, setCartItems] = useState(() => {
     try {
       const localData = localStorage.getItem('cartItems');
       return localData ? JSON.parse(localData) : [];
     } catch (error) {
-      console.error("Failed to parse cart items from localStorage", error);
+      console.error("Error parsing cart items from localStorage:", error);
       return [];
     }
   });
 
-  // Update localStorage whenever cartItems changes
   useEffect(() => {
-    try {
-      localStorage.setItem('cartItems', JSON.stringify(cartItems));
-    } catch (error) {
-      console.error("Failed to save cart items to localStorage", error);
-    }
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }, [cartItems]);
 
-  // Function to add an item to the cart
   const addToCart = (product) => {
     setCartItems((prevItems) => {
-      const existingItem = prevItems.find((item) => item.id === product.id);
+      const existingItem = prevItems.find(
+        (item) =>
+          item.originalId === product.originalId &&
+          item.selectedColor === product.selectedColor &&
+          item.selectedSize === product.selectedSize
+      );
 
       if (existingItem) {
-        // If item exists, increase its quantity
         return prevItems.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+          item.id === existingItem.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
         );
       } else {
-        // If item doesn't exist, add it with quantity 1
-        return [...prevItems, { ...product, quantity: 1 }];
+        const newCartItem = {
+          ...product,
+          id: `${product.originalId}-${product.selectedColor}-${product.selectedSize}-${Date.now()}`,
+          quantity: 1,
+        };
+        return [...prevItems, newCartItem];
       }
     });
   };
 
-  // Function to remove an item from the cart
+  const decreaseQuantity = (id) => {
+    setCartItems((prevItems) => {
+      const existingItem = prevItems.find((item) => item.id === id);
+      if (existingItem && existingItem.quantity > 1) {
+        return prevItems.map((item) =>
+          item.id === id ? { ...item, quantity: item.quantity - 1 } : item
+        );
+      } else {
+        return prevItems.filter((item) => item.id !== id);
+      }
+    });
+  };
+
   const removeFromCart = (id) => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
-  // Function to decrease quantity or remove if quantity becomes 0
-  const decreaseQuantity = (id) => {
-    setCartItems((prevItems) => {
-      const existingItem = prevItems.find((item) => item.id === id);
-
-      if (!existingItem) return prevItems; // Item not found
-
-      if (existingItem.quantity <= 1) { // Changed to <= 1 to ensure removal at 1
-        return prevItems.filter((item) => item.id !== id); // Remove if quantity is 1 or less
-      } else {
-        return prevItems.map((item) =>
-          item.id === id ? { ...item, quantity: item.quantity - 1 } : item
-        );
-      }
-    });
+  const clearCart = () => {
+    setCartItems([]);
   };
 
-  // Calculate total number of items in cart (for the icon count)
-  const getTotalItems = () => {
-    return cartItems.reduce((total, item) => total + item.quantity, 0);
-  };
-
-  // Calculate total price of items in cart
   const getCartTotal = () => {
-    return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2);
+    if (!Array.isArray(cartItems) || cartItems.length === 0) {
+      return 0; // Ensures a number is always returned
+    }
+
+    const total = cartItems.reduce((totalAccumulator, item) => {
+      const price = typeof item.price === 'number' ? item.price : 0;
+      const quantity = typeof item.quantity === 'number' ? item.quantity : 0;
+      return totalAccumulator + (price * quantity);
+    }, 0);
+
+    if (typeof total !== 'number' || isNaN(total)) {
+      console.error("Calculated total is not a number:", total, "Cart Items:", cartItems);
+      return 0; // Fallback for safety
+    }
+
+    return total; // Return the raw number, .toFixed() will be applied where displayed
+  };
+
+  const getCartItemCount = () => {
+    return cartItems.reduce((count, item) => count + item.quantity, 0);
   };
 
   return (
@@ -79,18 +95,14 @@ export const CartProvider = ({ children }) => {
       value={{
         cartItems,
         addToCart,
-        removeFromCart,
         decreaseQuantity,
-        getTotalItems,
+        removeFromCart,
+        clearCart,
         getCartTotal,
+        getCartItemCount,
       }}
     >
       {children}
     </CartContext.Provider>
   );
-};
-
-// 3. Create a Custom Hook to use the Context
-export const useCart = () => {
-  return useContext(CartContext);
 };

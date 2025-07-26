@@ -1,146 +1,44 @@
 /* src/pages/CheckoutPage.css */
-.checkout-page-container {
-  padding: 80px 20px;
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
-  background-color: var(--white, #fff);
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-  min-height: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
 
-.checkout-page-container h1 {
-  font-size: 2.8em;
-  color: var(--primary-blue);
-  margin-bottom: 20px;
-}
-
-.checkout-page-container p {
-  font-size: 1.1em;
-  color: var(--text-color);
-  margin-bottom: 15px;
-}
-
-/* Styles for the Stripe Checkout Form */
-.checkout-form {
-  width: 100%;
-  padding: 30px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background-color: var(--light-bg);
-  margin-top: 30px;
-  box-shadow: inset 0 2px 5px rgba(0,0,0,0.03);
-}
-
-.form-group {
-  margin-bottom: 25px;
-  text-align: left; /* Align labels to the left */
-}
-
+/* Basic styling for the CardElement container */
 .form-group label {
   display: block;
-  margin-bottom: 10px;
-  font-size: 1.1em;
-  font-weight: 600;
-  color: var(--secondary-dark);
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: var(--text-color); /* Use a global text color variable */
 }
 
-/* Stripe CardElement styling (via Stripe's API, not direct CSS) */
-.StripeElement { /* This class is added by Stripe.js to the CardElement iframe */
-  box-sizing: border-box;
-  height: 48px; /* Slightly taller for better touch targets */
-  padding: 14px 12px;
-  border: 1px solid var(--border-color);
+/* Style for the Stripe CardElement wrapper */
+.StripeElement {
+  height: 40px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color); /* Use a global border color */
   border-radius: 4px;
   background-color: var(--white);
-  box-shadow: 0 1px 3px 0 #e6ebf1;
-  -webkit-transition: box-shadow 150ms ease;
-  transition: box-shadow 150ms ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  -webkit-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  display: flex; /* Ensure inner elements align */
+  align-items: center; /* Vertically center content */
 }
 
 .StripeElement--focus {
-  box-shadow: 0 1px 3px 0 #cfd7df, 0 0 0 2px rgba(0, 123, 255, 0.2); /* Highlight on focus */
+  border-color: var(--primary-blue);
+  box-shadow: 0 1px 3px rgba(0, 123, 255, 0.2);
 }
 
 .StripeElement--invalid {
-  border-color: #fa755a;
+  border-color: #dc3545; /* Red for invalid input */
 }
 
 .StripeElement--webkit-autofill {
   background-color: #fefde5 !important;
 }
 
-.checkout-total {
-  font-size: 1.6em;
-  font-weight: bold;
-  color: var(--primary-blue);
-  margin-top: 30px;
-  margin-bottom: 20px;
-}
-
-.submit-payment-button {
-  background-color: var(--accent-pink);
-  color: var(--white);
-  padding: 15px 30px;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.3em;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-  box-shadow: 0 5px 15px rgba(253, 126, 20, 0.3);
-  width: 100%; /* Make button full width */
-  max-width: 400px; /* Limit max width for better appearance */
-  margin-top: 20px;
-}
-
-.submit-payment-button:hover:not(:disabled) {
-  background-color: #e66d00;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(253, 126, 20, 0.4);
-}
-
-.submit-payment-button:disabled {
-  background-color: var(--light-grey);
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-/* Styles for empty cart on checkout page */
-.empty-cart-checkout {
-  min-height: 50vh;
-  justify-content: center;
-}
-
-.empty-cart-checkout h1 {
-  color: var(--accent-pink);
-  font-size: 3em;
-  margin-bottom: 20px;
-}
-
-.empty-cart-checkout p {
-  font-size: 1.2em;
-  color: var(--secondary-dark);
-  margin-bottom: 30px;
-}
-
-.shop-now-button-checkout {
-  display: inline-block;
-  background-color: var(--primary-blue);
-  color: var(--white);
-  padding: 12px 25px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.shop-now-button-checkout:hover {
-  background-color: #0056b3;
-  transform: translateY(-2px);
+/* Responsive adjustments for smaller screens (optional, but good practice) */
+@media (max-width: 600px) {
+  /* Adjust padding or font sizes for smaller screens if needed */
+  .StripeElement {
+    font-size: 14px;
+  }
 }

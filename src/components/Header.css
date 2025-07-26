@@ -1,0 +1,9 @@
+/* src/components/Header.css */
+/* Add any specific styles for your Header component here */
+
+/* Example: If you want to style the logo text */
+.logo-text {
+    font-weight: bold;
+    color: #232F3E; /* Or any color from your theme */
+    /* Add other styles like font-size, etc. */
+}

@@ -1,6 +1,7 @@
+// src/pages/CartPage.jsx
 import React from 'react';
 import { useCart } from '../context/CartContext';
-import { Link } from 'react-router-dom'; // Ensure Link is imported
+import { Link } from 'react-router-dom';
 
 const CartPage = () => {
   const { cartItems, addToCart, decreaseQuantity, removeFromCart, getCartTotal } = useCart();
@@ -12,7 +13,7 @@ const CartPage = () => {
       {cartItems.length === 0 ? (
         <div style={cartPageStyles.emptyCart}>
           <p>Your cart is empty.</p>
-          <Link to="/shop" style={cartPageStyles.shopNowButton}> {/* Changed to /shop for product list */}
+          <Link to="/shop" style={cartPageStyles.shopNowButton}>
             Start Shopping
           </Link>
         </div>
@@ -21,7 +22,13 @@ const CartPage = () => {
           <div style={cartPageStyles.cartItemsGrid}>
             {cartItems.map((item) => (
               <div key={item.id} style={cartPageStyles.cartItemCard}>
-                <img src={item.image} alt={item.name} style={cartPageStyles.itemImage} />
+                {/* IMPORTANT: Ensure item.image exists and points to a valid public path */}
+                {/* Example if product.image is 'black_bra_side.png' and in public/images/ */}
+                <img
+                  src={item.image ? `/images/${item.image}` : '/placeholder-image.png'} // Fallback if image is missing
+                  alt={item.name}
+                  style={cartPageStyles.itemImage}
+                />
                 <div style={cartPageStyles.itemDetails}>
                   <h3 style={cartPageStyles.itemName}>{item.name}</h3>
                   <p style={cartPageStyles.itemPrice}>£{(item.price * item.quantity).toFixed(2)}</p>
@@ -53,8 +60,7 @@ const CartPage = () => {
 
           <div style={cartPageStyles.cartSummary}>
             <h3 style={cartPageStyles.summaryHeading}>Cart Summary</h3>
-            <p style={cartPageStyles.totalText}>Total ({cartItems.reduce((acc, item) => acc + item.quantity, 0)} items): <span style={cartPageStyles.totalAmount}>£{getCartTotal()}</span></p>
-            {/* CORRECTED: Use Link to navigate to checkout */}
+            <p style={cartPageStyles.totalText}>Total ({cartItems.reduce((acc, item) => acc + item.quantity, 0)} items): <span style={cartPageStyles.totalAmount}>£{getCartTotal().toFixed(2)}</span></p> {/* Call toFixed here */}
             <Link to="/checkout" style={cartPageStyles.checkoutButton}>
               Proceed to Checkout
             </Link>

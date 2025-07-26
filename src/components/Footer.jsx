@@ -1,148 +1,187 @@
-// src/components/Footer.jsx
+// src/components/Footer.jsx (UPDATED with Material-UI & unused import removed)
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom'; // Alias Link from react-router-dom
+import {
+  Box,
+  Container,
+  Grid,
+  Typography,
+  Link as MuiLink, // Alias Link from Material-UI for external links
+  // IconButton, // This import has been removed as it was not used
+} from '@mui/material';
+
+// Import social media icons (ensure you have @mui/icons-material installed)
+import FacebookIcon from '@mui/icons-material/Facebook';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import TwitterIcon from '@mui/icons-material/Twitter';
 
 const Footer = () => {
   return (
-    <footer style={footerStyles.container}>
-      <div style={footerStyles.contentWrapper}>
-        <div style={footerStyles.section}>
-          <h3 style={footerStyles.heading}>Mirute Ltd.</h3>
-          <p style={footerStyles.text}>
-            Your destination for premium comfort and style in seamless push-up bras.
-          </p>
-          <div style={footerStyles.socialIcons}>
-            {/* These are external links, so <a> is fine. They have valid hrefs. */}
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" style={footerStyles.socialLink}>📘</a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" style={footerStyles.socialLink}>📸</a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" style={footerStyles.socialLink}>🐦</a>
-          </div>
-        </div>
+    <Box
+      component="footer"
+      sx={{
+        backgroundColor: 'secondary.main', // Uses secondary-dark from your theme
+        color: 'white', // Text color will be white (or light-bg in your old theme terms)
+        padding: { xs: '30px 20px', md: '50px 20px 30px 20px' }, // Responsive padding
+        marginTop: 'auto', // Pushes footer to the bottom
+        borderTop: '5px solid',
+        borderColor: 'primary.main', // Uses primary-blue from your theme
+      }}
+    >
+      <Container maxWidth="lg" sx={{ mb: { xs: 3, md: 6 } }}>
+        <Grid container spacing={{ xs: 4, md: 5 }} justifyContent="center">
+          {/* Section 1: Mirute Ltd. */}
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography
+              variant="h6"
+              component="h3"
+              sx={{
+                color: 'primary.light', // Using a lighter primary shade for headings
+                mb: 2,
+                pb: 1.2,
+                borderBottom: '2px solid',
+                borderColor: 'primary.light',
+                fontWeight: 600,
+              }}
+            >
+              Mirute Ltd.
+            </Typography>
+            <Typography variant="body2" sx={{ lineHeight: 1.7, mb: 2, color: 'text.secondary' }}> {/* Using text.secondary for a slightly lighter text */}
+              Your destination for premium comfort and style in seamless push-up bras.
+            </Typography>
+            <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
+              <MuiLink href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" sx={{ color: 'white', '&:hover': { color: 'primary.light', transform: 'scale(1.1)' } }}>
+                <FacebookIcon sx={{ fontSize: '2.2em' }} />
+              </MuiLink>
+              <MuiLink href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" sx={{ color: 'white', '&:hover': { color: 'primary.light', transform: 'scale(1.1)' } }}>
+                <InstagramIcon sx={{ fontSize: '2.2em' }} />
+              </MuiLink>
+              <MuiLink href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter" sx={{ color: 'white', '&:hover': { color: 'primary.light', transform: 'scale(1.1)' } }}>
+                <TwitterIcon sx={{ fontSize: '2.2em' }} />
+              </MuiLink>
+            </Box>
+          </Grid>
 
-        <div style={footerStyles.section}>
-          <h3 style={footerStyles.heading}>Quick Links</h3>
-          <ul style={footerStyles.linkList}>
-            {/* Changed <a> to <Link> for internal navigation */}
-            <li><Link to="/shop" style={footerStyles.link}>Shop All Bras</Link></li>
-            <li><Link to="/size-guide" style={footerStyles.link}>Size Guide</Link></li>
-            <li><Link to="/faq" style={footerStyles.link}>FAQs</Link></li>
-            <li><Link to="/contact" style={footerStyles.link}>Contact Us</Link></li>
-            <li><Link to="/blog" style={footerStyles.link}>Blog</Link></li>
-          </ul>
-        </div>
+          {/* Section 2: Quick Links */}
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography
+              variant="h6"
+              component="h3"
+              sx={{
+                color: 'primary.light',
+                mb: 2,
+                pb: 1.2,
+                borderBottom: '2px solid',
+                borderColor: 'primary.light',
+                fontWeight: 600,
+              }}
+            >
+              Quick Links
+            </Typography>
+            <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
+              <li><MuiLink component={RouterLink} to="/shop" sx={footerLinkStyle}>Shop All Bras</MuiLink></li>
+              <li><MuiLink component={RouterLink} to="/size-guide" sx={footerLinkStyle}>Size Guide</MuiLink></li>
+              <li><MuiLink component={RouterLink} to="/faq" sx={footerLinkStyle}>FAQs</MuiLink></li>
+              <li><MuiLink component={RouterLink} to="/contact" sx={footerLinkStyle}>Contact Us</MuiLink></li>
+              <li><MuiLink component={RouterLink} to="/blog" sx={footerLinkStyle}>Blog</MuiLink></li>
+            </Box>
+          </Grid>
 
-        <div style={footerStyles.section}>
-          <h3 style={footerStyles.heading}>Customer Service</h3>
-          <ul style={footerStyles.linkList}>
-            {/* Changed <a> to <Link> for internal navigation */}
-            <li><Link to="/returns" style={footerStyles.link}>Returns & Refunds</Link></li>
-            <li><Link to="/shipping" style={footerStyles.link}>Shipping Info</Link></li>
-            <li><Link to="/privacy" style={footerStyles.link}>Privacy Policy</Link></li>
-            <li><Link to="/terms" style={footerStyles.link}>Terms of Service</Link></li>
-          </ul>
-        </div>
+          {/* Section 3: Customer Service */}
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography
+              variant="h6"
+              component="h3"
+              sx={{
+                color: 'primary.light',
+                mb: 2,
+                pb: 1.2,
+                borderBottom: '2px solid',
+                borderColor: 'primary.light',
+                fontWeight: 600,
+              }}
+            >
+              Customer Service
+            </Typography>
+            <Box component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
+              <li><MuiLink component={RouterLink} to="/returns" sx={footerLinkStyle}>Returns & Refunds</MuiLink></li>
+              <li><MuiLink component={RouterLink} to="/shipping" sx={footerLinkStyle}>Shipping Info</MuiLink></li>
+              <li><MuiLink component={RouterLink} to="/privacy" sx={footerLinkStyle}>Privacy Policy</MuiLink></li>
+              <li><MuiLink component={RouterLink} to="/terms" sx={footerLinkStyle}>Terms of Service</MuiLink></li>
+            </Box>
+          </Grid>
 
-        <div style={footerStyles.section}>
-          <h3 style={footerStyles.heading}>Contact</h3>
-          <p style={footerStyles.text}>Email: Mirute1307@gmail.com</p>
-          <p style={footerStyles.text}>Phone: 07765394030</p>
-          <p style={footerStyles.text}>Address: 209A Roxeth Green Avenue, Harrow, London, HA2 0QG, UK</p>
-        </div>
-      </div>
+          {/* Section 4: Contact */}
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography
+              variant="h6"
+              component="h3"
+              sx={{
+                color: 'primary.light',
+                mb: 2,
+                pb: 1.2,
+                borderBottom: '2px solid',
+                borderColor: 'primary.light',
+                fontWeight: 600,
+              }}
+            >
+              Contact
+            </Typography>
+            <Typography variant="body2" sx={footerContactTextStyle}>Email: Mirute1307@gmail.com</Typography>
+            <Typography variant="body2" sx={footerContactTextStyle}>Phone: 07765394030</Typography>
+            <Typography variant="body2" sx={footerContactTextStyle}>Address: 209A Roxeth Green Avenue, Harrow, London, HA2 0QG, UK</Typography>
+          </Grid>
+        </Grid>
+      </Container>
 
-      <div style={footerStyles.bottomBar}>
-        <p style={footerStyles.copyright}>
+      {/* Bottom Bar */}
+      <Box
+        sx={{
+          borderTop: '1px solid #555555',
+          pt: 3,
+          mt: 3,
+          textAlign: 'center',
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' }, // Stack on small, row on medium+
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          maxWidth: 'lg', // Match container width
+          margin: '0 auto',
+        }}
+      >
+        <Typography variant="caption" sx={{ color: '#AAAAAA', mb: { xs: 1, sm: 0 } }}>
           &copy; {new Date().getFullYear()} Mirute Ltd. All rights reserved.
-        </p>
-        <div style={footerStyles.paymentIcons}>
+        </Typography>
+        <Box sx={{ fontSize: '2em', color: 'white', display: 'flex', gap: 1.5, mb: { xs: 1, sm: 0 } }}>
+          {/* Payment Icons - Using emojis as placeholders. Consider actual image assets for production. */}
           <span>💳</span><span>🅿️</span><span></span>
-        </div>
-      </div>
-    </footer>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
-const footerStyles = {
-  container: {
-    backgroundColor: 'var(--secondary-dark)',
-    color: 'var(--light-bg)',
-    padding: '50px 20px 30px 20px',
-    marginTop: 'auto',
-    fontFamily: 'inherit',
-    borderTop: '5px solid var(--primary-blue)',
-  },
-  contentWrapper: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-    gap: '40px',
-    maxWidth: '1200px',
-    margin: '0 auto 50px auto',
-  },
-  section: {
-    marginBottom: '20px',
-  },
-  heading: {
-    fontSize: '1.4em',
-    color: 'var(--primary-blue)',
-    marginBottom: '20px',
-    borderBottom: '2px solid var(--primary-blue)',
-    paddingBottom: '10px',
-    fontWeight: '600',
-  },
-  text: {
-    fontSize: '0.98em',
-    lineHeight: '1.7',
-    marginBottom: '10px',
-    color: 'var(--light-bg)',
-  },
-  socialIcons: {
-    marginTop: '20px',
-    display: 'flex',
-    gap: '20px',
-  },
-  socialLink: {
-    fontSize: '2em',
-    textDecoration: 'none',
-    color: 'var(--light-bg)',
-    transition: 'color 0.3s ease, transform 0.2s ease',
-  },
-  linkList: {
-    listStyle: 'none',
-    margin: 0,
-    padding: 0,
-  },
-  link: {
-    textDecoration: 'none',
-    color: 'var(--light-bg)',
-    fontSize: '0.98em',
-    marginBottom: '10px',
-    display: 'block',
-    transition: 'color 0.3s ease',
-  },
-  bottomBar: {
-    borderTop: '1px solid #555555',
-    paddingTop: '25px',
-    marginTop: '25px',
-    textAlign: 'center',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    maxWidth: '1200px',
-    margin: '0 auto',
-  },
-  copyright: {
-    fontSize: '0.9em',
-    color: '#AAAAAA',
-    marginBottom: '10px',
-  },
-  paymentIcons: {
-    fontSize: '2em',
-    color: 'var(--light-bg)',
-    display: 'flex',
-    gap: '15px',
-    marginBottom: '10px',
+// Common style for footer links
+const footerLinkStyle = {
+  textDecoration: 'none',
+  color: 'white',
+  fontSize: '0.98em',
+  mb: 1,
+  display: 'block',
+  transition: 'color 0.3s ease',
+  '&:hover': {
+    color: 'primary.light', // Hover effect using primary color from theme
   },
 };
+
+// Common style for contact text
+const footerContactTextStyle = {
+  fontSize: '0.98em',
+  lineHeight: '1.7',
+  mb: 1,
+  color: 'text.secondary',
+};
+
 
 export default Footer;
